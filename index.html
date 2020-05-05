@@ -32,20 +32,35 @@ html{
 padding:0;
 margin:0;
 }
-#titlek{
+#getstarted{
+color:blue;
+background:green;
+}
+#getstarted:before{
+color:transparent;
+content:"__________";
+}
+#getstarted:after{
+color:transparent;
+content:"__________";
+}
+.center{
 text-align:center;
+}
+.biggerlatter{
+font-size:2em;
 }
 </style>
 </head>
 <body>
   <div id="title">
 <h1>欢迎使用Mod.js</h1>
-<h2 id="titlek">Mod.js是全中国甚至全世界第一批WebSocket精品</h2>
+<h2 class="center">Mod.js是全中国甚至全世界第一批WebSocket精品</h2>
 <div id="lists">
 <div class="child1"><h2>易用</h2><p>我们拥有mod编辑器，方便编写！<br />
 只要你的指令及格，编写一个灵活的mod毫无问题<br />
 对Node.js开发者尤其友好<br />
-不像网易要收费，我们使用Mozilla开源协议<br />
+不像网易要收费，我们使用Mozilla开源协议且免费<br />
 </p>
 </div>
 <div class="child1"><h2>灵活</h2><p>从Alpha 0.16便有了WebSocket，<br />使得几乎全部Minecraft基岩版都可运行</p></div>
@@ -54,7 +69,7 @@ text-align:center;
 超快建造<br />
 以及最省心的优化！</p></div>
 </div>
-<h2><a href="/get-started">下载</a></h2>
+<h2 class="center biggerlatter"><a href="/get-started" id="getstarted">下载</a><br /><span style="font-size:0.5em;">(暂时只提供Windows版本)</span></h2>
     </div>
 
 </body>
