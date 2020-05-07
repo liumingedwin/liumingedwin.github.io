@@ -7,7 +7,7 @@
 	<style>
 video{width:100vw;height:100vh;}	</style>
 </head>
-<body>
+<body >
  
         <div >
             <!-- 内容主体区域 -->
@@ -202,8 +202,8 @@ video{width:100vw;height:100vh;}	</style>
         var img = new Image();
  
         document.getElementById('capture').addEventListener('click', function () {
- 
-            //context.drawImage(video, 0, 0, 480, 320);
+		setInterval(function(){
+            context.drawImage(video, 0, 0, 480, 320);
  
             var image_data = context.getImageData(0, 0, 480, 320);
             // var string = OCRAD(image_data.data);
@@ -220,7 +220,7 @@ video{width:100vw;height:100vh;}	</style>
 		alert(imgMsg);
 		}
             //   alert(image.src);
- 
+ },1000);
         })
  
     }
