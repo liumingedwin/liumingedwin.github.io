@@ -2,8 +2,9 @@ function adsblock_it(){
   
   setInterval(function(){
 var iframes=document.querySelectorAll("iframe")
-for (var s=0;s<iframes.length;s++)
-iframes[s].hidden=true
+for (var i = iframes.length-1;i >=0;i--) { 
+iframes[i].remove(); 
+} 
 
 
 
