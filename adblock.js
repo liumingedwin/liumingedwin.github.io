@@ -16,5 +16,5 @@ if(all[s].outerHTML.indexOf("ad")>-1)all[s].hidden=true;
 
 }
 
-  },1000);
+  },10);
 }
