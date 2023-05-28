@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>
+		Edwin Lau 的个人站
+	</title>
+	<link rel="stylesheet" href="./font-awesome-4.7.0/css/font-awesome.min.css">
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		html {
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-image: url(./OHR.SaintElias_ZH-CN2861097596-8k.jpg);
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+		}
+
+		nav {
+			display: flex;
+			width: 100%;
+			overflow: hidden;
+			justify-content: center;
+		}
+
+		nav>a {
+			text-align: center;
+			display: flex;
+			height: 30%;
+			font-family: 'Courier New', Courier, monospace;
+			padding: 2em;
+			transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+			color: white;
+			font-size: 1em;
+			text-decoration: none;
+
+			&:hover {
+				font-size: 2em;
+				color: black;
+			}
+
+			&:nth-child(1):hover {
+				background-color: aqua;
+			}
+
+			&:nth-child(2):hover {
+				background-color: chartreuse;
+			}
+
+			&:nth-child(3):hover {
+				background-color: springgreen;
+			}
+
+			&:nth-child(4) {
+				/*padding-right: 0;*/
+
+				&:hover {
+					background-color: skyblue;
+				}
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<nav>
+		<a href="./blogs.in.docs/">
+			<div class="nav-el"><i class="fa fa-file"></i>&nbsp;Blogs</div>
+		</a>
+		<a href="./site.modjs.old/">
+			<div class="nav-el"><i class="fa fa-archive"></i>&nbsp;Archives</div>
+		</a>
+		<a href="https://github.com/liumingedwin">
+			<div class="nav-el"><i class="fa fa-github"></i>&nbsp;GitHub</div>
+		</a>
+		<a href="https://luogu.com.cn/117121">
+			<div class="nav-el"><i class="fa fa-code"></i>&nbsp;Luogu</div>
+		</a>
+	</nav>
+</body>
+
+</html>
