@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/liumingedwin/liumingedwin.github.io.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master-old"]
+	remote = origin
+	merge = refs/heads/master-old

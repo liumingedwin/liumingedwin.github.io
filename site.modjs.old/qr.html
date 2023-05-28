@@ -1,0 +1,185 @@
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>js唤起摄像头识别二维码</title>
+<style>
+#scan {
+display: block;
+}
+#qr-canvas {
+max-width: 300px;
+}
+</style>
+<style type="text/css">#__vconsole{color:#000;font-size:13px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif}#__vconsole .vc-max-height{max-height:19.23076923em}#__vconsole .vc-max-height-line{max-height:3.38461538em}#__vconsole .vc-min-height{min-height:3.07692308em}#__vconsole dd,#__vconsole dl,#__vconsole pre{margin:0}#__vconsole .vc-switch{display:block;position:fixed;right:.76923077em;bottom:.76923077em;color:#fff;background-color:#04be02;line-height:1;font-size:1.07692308em;padding:.61538462em 1.23076923em;z-index:10000;border-radius:.30769231em;box-shadow:0 0 .61538462em rgba(0,0,0,.4)}#__vconsole .vc-mask{top:0;background:transparent;z-index:10001;transition:background .3s;-webkit-tap-highlight-color:transparent;overflow-y:scroll}#__vconsole .vc-mask,#__vconsole .vc-panel{display:none;position:fixed;left:0;right:0;bottom:0}#__vconsole .vc-panel{min-height:85%;z-index:10002;background-color:#efeff4;-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s;-webkit-transform:translateY(100%);transform:translateY(100%)}#__vconsole .vc-tabbar{border-bottom:1px solid #d9d9d9;overflow-x:auto;height:3em;width:auto;white-space:nowrap}#__vconsole .vc-tabbar .vc-tab{display:inline-block;line-height:3em;padding:0 1.15384615em;border-right:1px solid #d9d9d9;text-decoration:none;color:#000;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}#__vconsole .vc-tabbar .vc-tab:active{background-color:rgba(0,0,0,.15)}#__vconsole .vc-tabbar .vc-tab.vc-actived{background-color:#fff}#__vconsole .vc-content{background-color:#fff;overflow-x:hidden;overflow-y:auto;position:absolute;top:3.07692308em;left:0;right:0;bottom:3.07692308em;-webkit-overflow-scrolling:touch}#__vconsole .vc-content.vc-has-topbar{top:5.46153846em}#__vconsole .vc-topbar{background-color:#fbf9fe;display:flex;display:-webkit-box;flex-direction:row;flex-wrap:wrap;-webkit-box-direction:row;-webkit-flex-wrap:wrap;width:100%}#__vconsole .vc-topbar .vc-toptab{display:none;flex:1;-webkit-box-flex:1;line-height:2.30769231em;padding:0 1.15384615em;border-bottom:1px solid #d9d9d9;text-decoration:none;text-align:center;color:#000;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}#__vconsole .vc-topbar .vc-toptab.vc-toggle{display:block}#__vconsole .vc-topbar .vc-toptab:active{background-color:rgba(0,0,0,.15)}#__vconsole .vc-topbar .vc-toptab.vc-actived{border-bottom:1px solid #3e82f7}#__vconsole .vc-logbox{display:none;position:relative;min-height:100%}#__vconsole .vc-logbox i{font-style:normal}#__vconsole .vc-logbox .vc-log{padding-bottom:3em;-webkit-tap-highlight-color:transparent}#__vconsole .vc-logbox .vc-log:empty:before{content:"Empty";color:#999;position:absolute;top:45%;left:0;right:0;bottom:0;font-size:1.15384615em;text-align:center}#__vconsole .vc-logbox .vc-item{margin:0;padding:.46153846em .61538462em;overflow:hidden;line-height:1.3;border-bottom:1px solid #eee;word-break:break-word}#__vconsole .vc-logbox .vc-item-info{color:#6a5acd}#__vconsole .vc-logbox .vc-item-debug{color:#daa520}#__vconsole .vc-logbox .vc-item-warn{color:orange;border-color:#ffb930;background-color:#fffacd}#__vconsole .vc-logbox .vc-item-error{color:#dc143c;border-color:#f4a0ab;background-color:#ffe4e1}#__vconsole .vc-logbox .vc-log.vc-log-partly .vc-item{display:none}#__vconsole .vc-logbox .vc-log.vc-log-partly-error .vc-item-error,#__vconsole .vc-logbox .vc-log.vc-log-partly-info .vc-item-info,#__vconsole .vc-logbox .vc-log.vc-log-partly-log .vc-item-log,#__vconsole .vc-logbox .vc-log.vc-log-partly-warn .vc-item-warn{display:block}#__vconsole .vc-logbox .vc-item .vc-item-content{margin-right:4.61538462em;display:block}#__vconsole .vc-logbox .vc-item .vc-item-meta{color:#888;float:right;width:4.61538462em;text-align:right}#__vconsole .vc-logbox .vc-item.vc-item-nometa .vc-item-content{margin-right:0}#__vconsole .vc-logbox .vc-item.vc-item-nometa .vc-item-meta{display:none}#__vconsole .vc-logbox .vc-item .vc-item-code{display:block;white-space:pre-wrap;overflow:auto;position:relative}#__vconsole .vc-logbox .vc-item .vc-item-code.vc-item-code-input,#__vconsole .vc-logbox .vc-item .vc-item-code.vc-item-code-output{padding-left:.92307692em}#__vconsole .vc-logbox .vc-item .vc-item-code.vc-item-code-input:before,#__vconsole .vc-logbox .vc-item .vc-item-code.vc-item-code-output:before{content:"\203A";position:absolute;top:-.23076923em;left:0;font-size:1.23076923em;color:#6a5acd}#__vconsole .vc-logbox .vc-item .vc-item-code.vc-item-code-output:before{content:"\2039"}#__vconsole .vc-logbox .vc-item .vc-fold{display:block;overflow:auto;-webkit-overflow-scrolling:touch}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-outer{display:block;font-style:italic;padding-left:.76923077em;position:relative}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-outer:active{background-color:#e6e6e6}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-outer:before{content:"";position:absolute;top:.30769231em;left:.15384615em;width:0;height:0;border:.30769231em solid transparent;border-left-color:#000}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-outer.vc-toggle:before{top:.46153846em;left:0;border-top-color:#000;border-left-color:transparent}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-inner{display:none;margin-left:.76923077em}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-inner.vc-toggle{display:block}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-inner .vc-code-key{margin-left:.76923077em}#__vconsole .vc-logbox .vc-item .vc-fold .vc-fold-outer .vc-code-key{margin-left:0}#__vconsole .vc-logbox .vc-code-key{color:#905}#__vconsole .vc-logbox .vc-code-private-key{color:#d391b5}#__vconsole .vc-logbox .vc-code-function{color:#905;font-style:italic}#__vconsole .vc-logbox .vc-code-boolean,#__vconsole .vc-logbox .vc-code-number{color:#0086b3}#__vconsole .vc-logbox .vc-code-string{color:#183691}#__vconsole .vc-logbox .vc-code-null,#__vconsole .vc-logbox .vc-code-undefined{color:#666}#__vconsole .vc-logbox .vc-cmd{position:absolute;height:3.07692308em;left:0;right:0;bottom:0;border-top:1px solid #d9d9d9;display:block!important}#__vconsole .vc-logbox .vc-cmd .vc-cmd-input-wrap{display:block;height:2.15384615em;margin-right:3.07692308em;padding:.46153846em .61538462em}#__vconsole .vc-logbox .vc-cmd .vc-cmd-input{width:100%;border:none;resize:none;outline:none;padding:0;font-size:.92307692em}#__vconsole .vc-logbox .vc-cmd .vc-cmd-input::-webkit-input-placeholder{line-height:2.15384615em}#__vconsole .vc-logbox .vc-cmd .vc-cmd-btn{position:absolute;top:0;right:0;bottom:0;width:3.07692308em;border:none;background-color:#efeff4;outline:none;-webkit-touch-callout:none;font-size:1em}#__vconsole .vc-logbox .vc-cmd .vc-cmd-btn:active{background-color:rgba(0,0,0,.15)}#__vconsole .vc-logbox .vc-group .vc-group-preview{-webkit-touch-callout:none}#__vconsole .vc-logbox .vc-group .vc-group-preview:active{background-color:#e6e6e6}#__vconsole .vc-logbox .vc-group .vc-group-detail{display:none;padding:0 0 .76923077em 1.53846154em;border-bottom:1px solid #eee}#__vconsole .vc-logbox .vc-group.vc-actived .vc-group-detail{display:block;background-color:#fbf9fe}#__vconsole .vc-logbox .vc-group.vc-actived .vc-table-row{background-color:#fff}#__vconsole .vc-logbox .vc-group.vc-actived .vc-group-preview{background-color:#fbf9fe}#__vconsole .vc-logbox .vc-table .vc-table-row{display:flex;display:-webkit-flex;flex-direction:row;flex-wrap:wrap;-webkit-box-direction:row;-webkit-flex-wrap:wrap;overflow:hidden;border-bottom:1px solid #eee}#__vconsole .vc-logbox .vc-table .vc-table-row.vc-left-border{border-left:1px solid #eee}#__vconsole .vc-logbox .vc-table .vc-table-col{flex:1;-webkit-box-flex:1;padding:.23076923em .30769231em;border-left:1px solid #eee;overflow:auto;white-space:pre-wrap;word-break:break-word;-webkit-overflow-scrolling:touch}#__vconsole .vc-logbox .vc-table .vc-table-col:first-child{border:none}#__vconsole .vc-logbox .vc-table .vc-small .vc-table-col{padding:0 .30769231em;font-size:.92307692em}#__vconsole .vc-logbox .vc-table .vc-table-col-2{flex:2;-webkit-box-flex:2}#__vconsole .vc-logbox .vc-table .vc-table-col-3{flex:3;-webkit-box-flex:3}#__vconsole .vc-logbox .vc-table .vc-table-col-4{flex:4;-webkit-box-flex:4}#__vconsole .vc-logbox .vc-table .vc-table-col-5{flex:5;-webkit-box-flex:5}#__vconsole .vc-logbox .vc-table .vc-table-col-6{flex:6;-webkit-box-flex:6}#__vconsole .vc-logbox .vc-table .vc-table-row-error{border-color:#f4a0ab;background-color:#ffe4e1}#__vconsole .vc-logbox .vc-table .vc-table-row-error .vc-table-col{color:#dc143c;border-color:#f4a0ab}#__vconsole .vc-logbox .vc-table .vc-table-col-title{font-weight:700}#__vconsole .vc-logbox.vc-actived{display:block}#__vconsole .vc-toolbar{border-top:1px solid #d9d9d9;line-height:3em;position:absolute;left:0;right:0;bottom:0;display:flex;display:-webkit-box;flex-direction:row;-webkit-box-direction:row}#__vconsole .vc-toolbar .vc-tool{display:none;text-decoration:none;color:#000;width:50%;flex:1;-webkit-box-flex:1;text-align:center;position:relative;-webkit-touch-callout:none}#__vconsole .vc-toolbar .vc-tool.vc-global-tool,#__vconsole .vc-toolbar .vc-tool.vc-toggle{display:block}#__vconsole .vc-toolbar .vc-tool:active{background-color:rgba(0,0,0,.15)}#__vconsole .vc-toolbar .vc-tool:after{content:" ";position:absolute;top:.53846154em;bottom:.53846154em;right:0;border-left:1px solid #d9d9d9}#__vconsole .vc-toolbar .vc-tool-last:after{border:none}#__vconsole.vc-toggle .vc-switch{display:none}#__vconsole.vc-toggle .vc-mask{background:rgba(0,0,0,.6);display:block}#__vconsole.vc-toggle .vc-panel{-webkit-transform:translate(0);transform:translate(0)}</style><style type="text/css">.vcelm-node{color:#183691}.vcelm-k{color:#0086b3}.vcelm-v{color:#905}.vcelm-l{padding-left:8px;position:relative;word-wrap:break-word;line-height:1}.vcelm-l.vc-toggle>.vcelm-node{display:block}.vcelm-l .vcelm-node:active{background-color:rgba(0,0,0,.15)}.vcelm-l.vcelm-noc .vcelm-node:active{background-color:transparent}.vcelm-t{white-space:pre-wrap;word-wrap:break-word}.vcelm-l .vcelm-l{display:none}.vcelm-l.vc-toggle>.vcelm-l{margin-left:4px;display:block}.vcelm-l:before{content:"";display:block;position:absolute;top:6px;left:3px;width:0;height:0;border:3px solid transparent;border-left-color:#000}.vcelm-l.vc-toggle:before{display:block;top:6px;left:0;border-top-color:#000;border-left-color:transparent}.vcelm-l.vcelm-noc:before{display:none}</style><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> <script type="text/javascript" src="http://www.zhangxinxu.com/study/js/jquery.htmlcode-1.0.js"></script></head>
+
+<body>
+<div><a href="/" target="_blank">本站首页</a></div>
+<hr>
+<div>兼容性只在手机中的chrome中测试通过，微信里面也能使用，但是canvas绘图很卡</div>
+<div>原理：调用摄像头，将摄像头返回的媒体流渲染到视频标签中，再通过canvas绘制到画布上面，最后通过canvas分析二维码</div>
+<hr>
+<a href="javascript:;" id="scan">扫码</a>
+<div id="output"></div>
+<!-- 由于llqrcode.js中写死了id，所以id必须为qr-canvas -->
+<canvas id="qr-canvas"></canvas>
+<video id="video" muted="" autoplay="" width="300" height="200"></video>
+<script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
+<script>
+let vConsole = new VConsole();
+</script>
+<script type="text/javascript" src="llqrcode.js"></script>
+<script type="text/javascript">
+
+const Scan = {
+videoInputDevice: [],
+videoElement: document.getElementById("video"),
+canvasElement: document.getElementById("qr-canvas"),
+decodeTimer: null,
+canvasTimer: null,
+canvasContext: document.getElementById("qr-canvas").getContext("2d"),
+// 获取到的媒体设备
+gotDevices (deviceInfos) {
+let that = this;
+for (let i = 0; i !== deviceInfos.length; ++i) {
+let deviceInfo = deviceInfos[i];
+if (deviceInfo.kind === 'audioinput') {
+// 音频设备
+} else if (deviceInfo.kind === 'videoinput') {
+// 视频设备
+that.videoInputDevice.push(deviceInfo);
+} else {
+// 其他设备
+console.log('Found one other kind of source/device: ', deviceInfo);
+}
+}
+},
+getStream () {
+let that = this;
+if (window.stream) {
+window.stream.getTracks().forEach((track) => {
+track.stop();
+});
+}
+
+let constraints = {
+// 包含audio 可声明音频设备调用
+// 声明视频设备调用
+// video: true
+video: {
+deviceId: {
+// [1].deviceId 表示后置摄像头,默认开启的是前置摄像头
+exact: that.videoInputDevice[1].deviceId
+}
+}
+};
+
+
+/* // 微信里面此方法无效开启后置摄像头无效，必须使用 deviceId 开启
+// 在chrome浏览器中可使用此方法开启后置摄像头
+let front = false;
+let constraints = {
+video: {
+// environment表示后置摄像头
+// user表示前置摄像头
+facingMode: (front? "user" : "environment")
+}
+}; */
+
+// 视频设备初始化
+navigator.mediaDevices.getUserMedia(constraints).then(that.gotStream.bind(that)).catch(that.handleError.bind(that));
+that.captureToCanvas();
+that.decode();
+},
+
+// 解码
+decode () {
+let that = this;
+try {
+qrcode.decode();
+} catch (e) {
+console.log(e);
+};
+that.decodeTimer = setTimeout(that.decode.bind(that), 1000); // 解码频率为1秒一次
+},
+
+//将视频流放到画布
+captureToCanvas () {
+let that = this;
+try {
+// 根据视频大小设置canvas大小
+let w = that.videoElement.videoWidth;
+let h = that.videoElement.videoHeight;
+that.canvasElement.width = w;
+that.canvasElement.height = h;
+that.canvasContext.drawImage(that.videoElement, 0, 0, w, h);
+} catch (e) {
+console.log(e);
+};
+// 200毫秒绘制一次
+that.canvasTimer = setTimeout(that.captureToCanvas.bind(that), 200);
+},
+
+handleError (error) {
+console.log('Error: ', error);
+},
+
+gotStream (stream) {
+let that = this;
+window.stream = stream; // make stream available to console
+that.videoElement.srcObject = stream;
+},
+
+init () {
+let that = this;
+// API参考
+// https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/enumerateDevices
+// 先获取设备列表，方便调用后置摄像头
+let devices = navigator.mediaDevices.enumerateDevices().then(that.gotDevices.bind(that));
+document.querySelector('#scan').addEventListener('click', () => {
+document.getElementById('output').innerHTML = '';
+that.videoElement.style.display = 'block';
+that.canvasElement.style.display = 'block';
+
+devices.then(that.getStream.bind(that)).catch(that.handleError.bind(that));
+
+that.canvasContext.clearRect(0, 0, 300, 200);
+//结果回调
+qrcode.callback = (e) => {
+// 清除画布，停止摄像头
+clearTimeout(that.decodeTimer);
+clearTimeout(that.canvasTimer);
+that.canvasContext.clearRect(0, 0, 300, 200);
+if (window.stream) {
+window.stream.getTracks().forEach((track) => {
+track.stop();
+});
+}
+that.videoElement.style.display = 'none';
+that.canvasElement.style.display = 'none';
+
+document.getElementById('output').innerHTML = '结果：' + e;
+}
+});
+}
+};
+Scan.init();
+</script>
+
+
+</body><div id="__vconsole" class="">
+<div class="vc-switch">vConsole</div>
+<div class="vc-mask" style="display: none;">
+</div>
+<div class="vc-panel">
+<div class="vc-tabbar">
+<a class="vc-tab vc-actived" data-tab="default" id="__vc_tab_default">Log</a><a class="vc-tab" data-tab="system" id="__vc_tab_system">System</a><a class="vc-tab" data-tab="network" id="__vc_tab_network">Network</a><a class="vc-tab" data-tab="element" id="__vc_tab_element">Element</a><a class="vc-tab" data-tab="storage" id="__vc_tab_storage">Storage</a></div>
+<div class="vc-topbar">
+<a class="vc-toptab vc-topbar-default vc-actived vc-toggle" data-type="all">All</a><a class="vc-toptab vc-topbar-default vc-toggle" data-type="log">Log</a><a class="vc-toptab vc-topbar-default vc-toggle" data-type="info">Info</a><a class="vc-toptab vc-topbar-default vc-toggle" data-type="warn">Warn</a><a class="vc-toptab vc-topbar-default vc-toggle" data-type="error">Error</a><a class="vc-toptab vc-topbar-system vc-actived" data-type="all">All</a><a class="vc-toptab vc-topbar-system" data-type="log">Log</a><a class="vc-toptab vc-topbar-system" data-type="info">Info</a><a class="vc-toptab vc-topbar-system" data-type="warn">Warn</a><a class="vc-toptab vc-topbar-system" data-type="error">Error</a><a class="vc-toptab vc-topbar-storage vc-actived" data-type="cookies">Cookies</a><a class="vc-toptab vc-topbar-storage" data-type="localstorage">LocalStorage</a></div>
+<div class="vc-content vc-has-topbar">
+<div class="vc-logbox vc-actived" id="__vc_log_default"> <div> <div class="vc-log"><div class="vc-item vc-item-error vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> TypeError: undefined is not an object (evaluating 'navigator.mediaDevices.enumerateDevices')<br>/documents/qr/index.html:140:45</span><span> init@http://192.168.1.111:8081/documents/qr/index.html:140:45<br>global code@http://192.168.1.111:8081/documents/qr/index.html:168:14</span></div></div></div>  <form class="vc-cmd"> <button class="vc-cmd-btn" type="submit">OK</button> <div class="vc-cmd-input-wrap"> <textarea class="vc-cmd-input" placeholder="command..."></textarea> </div>  </form></div></div><div class="vc-logbox" id="__vc_log_system"> <div> <div class="vc-log"><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> System:</span><span> iPad, iOS 14.0</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> Protocol:</span><span> HTTP</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> UA:</span><span> Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> navigationStart:</span><span> 1607611372357</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> navigation:</span><span> 0ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> dns:</span><span> 0ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> tcp:</span><span> 0ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> request:</span><span> 0ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> response:</span><span> 9ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> domComplete (domLoaded):</span><span> 18ms (16ms)</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> loadEvent:</span><span> 15ms</span></div></div><div class="vc-item vc-item-info vc-item-nometa "> <span class="vc-item-meta">22:42:52</span> <div class="vc-item-content"><span> total (DOM):</span><span> 45ms (30ms)</span></div></div></div></div></div><div class="vc-logbox" id="__vc_log_network"> <div class="vc-table"> <dl class="vc-table-row"> <dd class="vc-table-col vc-table-col-4">Name </dd> <dd class="vc-table-col">Method</dd> <dd class="vc-table-col">Status</dd> <dd class="vc-table-col">Time</dd></dl><div class="vc-log"></div></div></div><div class="vc-logbox" id="__vc_log_element"> <div> <div class="vc-log"></div></div></div><div class="vc-logbox" id="__vc_log_storage"> <div class="vc-table"> <div class="vc-log"></div></div></div></div>
+<div class="vc-toolbar">
+<a class="vc-tool vc-tool-default vc-toggle">Clear</a><a class="vc-tool vc-tool-system">Clear</a><a class="vc-tool vc-tool-network">Clear</a><a class="vc-tool vc-tool-element">Expend</a><a class="vc-tool vc-tool-element">Collapse</a><a class="vc-tool vc-tool-storage">Refresh</a><a class="vc-tool vc-tool-storage">Clear</a><a class="vc-tool vc-global-tool vc-tool-last vc-hide">Hide</a>
+</div>
+</div>
+</div></html>
