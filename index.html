@@ -49,19 +49,21 @@
 
 			&:hover {
 				font-size: 2em;
-				color: black;
 			}
 
 			&:nth-child(1):hover {
 				background-color: aqua;
+				color: gray;
 			}
 
 			&:nth-child(2):hover {
 				background-color: chartreuse;
+				color: darkblue;
 			}
 
 			&:nth-child(3):hover {
 				background-color: springgreen;
+				color: darkred;
 			}
 
 			&:nth-child(4) {
@@ -69,13 +71,29 @@
 
 				&:hover {
 					background-color: skyblue;
+					color: darkgreen;
 				}
 			}
+		}
+		img{
+			display: block;
+			--radius: 5em;
+			width: var(--radius);
+			height: var(--radius);
+			margin-left: calc(50% - var(--radius) / 2);
+			border-radius: 100%;
+		}
+		h1{
+			font-family: Consolas, monospace;
+			text-align: center;
+			color: white;
 		}
 	</style>
 </head>
 
 <body>
+	<img src="./avatar.jpg">
+	<h1>@liumingedwin</h1>
 	<nav>
 		<a href="./blogs.in.docs/">
 			<div class="nav-el"><i class="fa fa-file"></i>&nbsp;Blogs</div>
