@@ -1,3 +1,3 @@
 Edwin - 随笔 
 
-[目录](essay/directory.md ':include')
+[目录](directory.md ':include')
