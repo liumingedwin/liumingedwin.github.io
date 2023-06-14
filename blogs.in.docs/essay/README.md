@@ -1,3 +1,3 @@
 这里是 Edwin 的一些随笔~    
 
-[看看目录~](essay/directory.md ':include')
+[看看目录~](directory.md ':include')
