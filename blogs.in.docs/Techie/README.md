@@ -1,3 +1,3 @@
 # Techie  
   
-[directory](_sidebar.md :include)
+[directory](_sidebar.md ':include')
