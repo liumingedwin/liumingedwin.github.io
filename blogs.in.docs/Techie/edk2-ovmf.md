@@ -19,14 +19,21 @@ $ pwd
 $ cd BaseTools && make && cd ..
 
 ```
-## IV. (可选) 定制OVMF
+## IV. (可选) 定制
 进入 MdeModulePkg / Logo,  编辑Logo.bmp. 注意尺寸适中，不然到时候显示器装不下。
 
-## V. 编译OVMF
+## V. 编译
 ```bash
 $ pwd
 ~/edk2
 $ cd OvmfPkg && ./build && cd ..
 # 成品在Build/OvmfX64/DEBUG_GCC5/FV/OVMF.fd
 ```
+## VI. 测试
+```bash
+qemu-system-x86_64 --enable-kvm --smbios type=0,uefi=on --bios /path/to/edk2
+```
+## VII. 使用
+替换系统默认的(位于 `/usr/share/OVMF/OVMF(-CODE/-VARS).fd`)即可  
+但更推荐动态指定
 全程耗时 10 ~ 15 min, 难度较小。
