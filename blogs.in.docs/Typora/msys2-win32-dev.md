@@ -1,4 +1,4 @@
-# MSYS2: 在 `Windows` 上开发 `Win32` 应用的最佳选择
+# MSYS2: 在 `Windows` 上开发 `Win32` 应用
 
 ## 前言
 
@@ -6,7 +6,7 @@
 
 ~~(Keywords: `msys2, msys32, win32, windows`)~~
 
-目前为止, 我在 `Windows` 环境上使用过 `4` 种开发 `Win32` 软件的环境, 分别是: `Dev-C++`( `OI` 附送好吧), Code::Blocks`, `Red Panda Dev-C++`(前者 `Dev-C++` 的变种)以及 make + 手工编译. 经过一番研究, 我发现手工编译反而是最省心的, 理由如下:
+目前为止, 我在 `Windows` 环境上使用过 `4` 种开发 `Win32` 软件的环境, 分别是: `Dev-C++`( `OI` 附送好吧), `Code::Blocks`, `Red Panda Dev-C++`(前者 `Dev-C++` 的变种)以及 make + 手工编译. 经过一番研究, 我发现手工编译反而是最省心的, 理由如下:
 
 1. 我使用的是 `msys2` 的 `gcc/g++` , 非常稳定, 不会出现以前 `Dev-C++` 一个软件, 一天开一个新项目, 一天一个版本的痛苦经历.~~(我还记得当时四年级, 14天把一个文本编辑器从 `v1.0` 送到了 `v14.0`)~~
 2. `make` 编译, 避免了手工编译的麻烦, 与 `Linux` 的 `GNU` 工具链相吻合. 
@@ -25,17 +25,17 @@
 
 首先打开[校园网联合镜像站, 这里已经选好msys2, 您只需要选择离您地理位置最近的即可](https://mirrors.cernet.edu.cn/list/msys2), 以便加速下载. 
 
-![image-cernet.edu.cn](D:\Edwinlau.WWW\Documents\Typora\image-20230721-20.53.png)
+![image-cernet.edu.cn](./image-20230721-20.53.png)
 
 然后进入 `distrib` 文件夹, 下载适合您的版本. 其中 `*.sfx.exe` 为绿色版, `*.exe` 为安装版. 
 
-![image-20230722153636540](D:\Edwinlau.WWW\Documents\Typora\image-20230721-20.53.2.png)
+![image-20230722153636540](./image-20230721-20.53.2.png)
 
 安装路径推荐 `数据盘:\msys2` 或  `数据盘:\msys64`. 
 
 (只适用于安装版)然后, 设置环境变量. 以各种方式运行 `C:\Windows\system32\SystemPropertiesAdvanced.exe`, 点环境变量, 双击 `Path` (系统/用户看您心情). 若是 `Windows 7 ~ 8`, 手动输入`;C:\msys2`, 否则直接使用图形化界面添加安装目录. 
 
-![image-20230722153840788](D:\Edwinlau.WWW\Documents\Typora\image-20230721-21.04.40.png)
+![image-20230722153840788](./image-20230721-21.04.40.png)
 
 前面只是为了安装 `msys2` 这个兼容层, 下面进入重头戏. 
 
@@ -49,7 +49,7 @@
 
 <!--[图]-->
 
-![image-20230722153957693](D:\Edwinlau.WWW\Documents\Typora\image-20230721-21.31.10.png)
+![image-20230722153957693](./image-20230721-21.31.10.png)
 
 **注意: `msys2` 并不自带 `vi/vim`! **
 
@@ -103,7 +103,7 @@ g++ 1.cpp -luser32 -mwindows -static-libgcc -static-libg++ -o 1.exe
 参考资料: https://zhuanlan.zhihu.com/p/161343829
 
 ```bash
-windres -J rc -O COFF source.rc target.res
+windres -J rc -O COFF source.rc target.res # 只有 COFF 是与 g++ 兼容的... 
 g++ -c main.cpp -o main.o 
 g++ target.res main.o -o final.exe
 ```
@@ -328,7 +328,7 @@ include $(MAKEROOT)/Makefiles/footer.makefile
 
 <!-- [图] -->
 
-![image-20230722154409960](D:\Edwinlau.WWW\Documents\Typora\image-20230722154409960.png)
+![image-20230722154409960](./image-20230722154409960.png)
 
 ```bash
 msys2_shell.cmd -mingw64 -defterm -here -no-start
@@ -352,4 +352,4 @@ msys2_shell.cmd -mingw64 -defterm -here -no-start
 
 <!-- [图] -->
 
-![image-20230722154454990](D:\Edwinlau.WWW\Documents\Typora\image-20230721-21.45.22.png)
+![image-20230722154454990](./image-20230721-21.45.22.png)

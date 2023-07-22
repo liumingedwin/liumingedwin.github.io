@@ -1,1 +1,1 @@
-* [[2023-07-22]msys2 开发大型软件: 从入门到入土](Typora/msys2-win32-dev.md)
+* [[23-07-22]msys2:Win32 从入门到入土](Typora/msys2-win32-dev.md)
