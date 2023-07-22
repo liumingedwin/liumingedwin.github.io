@@ -2,3 +2,4 @@
 * [ChatGPT](Techie/chatgpt.md)
 * [NTP Systemd](Techie/ntp-systemd.md)
 * [EDK2 OVMF 编译](Techie/edk2-ovmf.md)
+* [msys2 开发大型软件: 从入门到入土](Typora/msys2-win32-dev.md)
