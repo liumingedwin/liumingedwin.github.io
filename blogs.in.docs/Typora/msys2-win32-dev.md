@@ -214,7 +214,7 @@ IDI_ICON ICON "2.ico"
 
 我们将稍微讲一下 `makefile` 文件的规则, 然后 `Talk is cheap, show me your code.` 
 
-![image-20230722154232145](D:\Edwinlau.WWW\Documents\Typora\image-20230721-22.02.21.png)
+![image-20230722154232145](./image-20230721-22.02.21.png)
 
 ### Dev-C++ Style
 
