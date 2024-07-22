@@ -25,17 +25,17 @@
 
 首先打开[校园网联合镜像站, 这里已经选好msys2, 您只需要选择离您地理位置最近的即可](https://mirrors.cernet.edu.cn/list/msys2), 以便加速下载. 
 
-![image-cernet.edu.cn](./image-20230721-20.53.png)
+![image-cernet.edu.cn](./msys2-win32-dev-resources/image-20230721-20.53.png)
 
 然后进入 `distrib` 文件夹, 下载适合您的版本. 其中 `*.sfx.exe` 为绿色版, `*.exe` 为安装版. 
 
-![image-20230722153636540](./image-20230721-20.53.2.png)
+![download-distrib](./msys2-win32-dev-resources/image-20230721-20.53.2.png)
 
 安装路径推荐 `数据盘:\msys2` 或  `数据盘:\msys64`. 
 
 (只适用于安装版)然后, 设置环境变量. 以各种方式运行 `C:\Windows\system32\SystemPropertiesAdvanced.exe`, 点环境变量, 双击 `Path` (系统/用户看您心情). 若是 `Windows 7 ~ 8`, 手动输入`;C:\msys2`, 否则直接使用图形化界面添加安装目录. 
 
-![image-20230722153840788](./image-20230721-21.04.40.png)
+![env-args](./msys2-win32-dev-resources/image-20230721-21.04.40.png)
 
 前面只是为了安装 `msys2` 这个兼容层, 下面进入重头戏. 
 
@@ -49,7 +49,7 @@
 
 <!--[图]-->
 
-![image-20230722153957693](./image-20230721-21.31.10.png)
+![adjust-mirrors](./msys2-win32-dev-resources/image-20230721-21.31.10.png)
 
 **注意: `msys2` 并不自带 `vi/vim`! **
 
@@ -69,7 +69,7 @@ pacman -S --needed mingw-w64-x86_64-toolchain
 # 小贴士: Ctrl + Ins ----> Copy, Shift + Ins ---> Paste, 右键 Options 还可以选 mintty 的字体.  
 ```
 
-**提醒: 如果需要在各种情况下编译 `gcc`, 也可以将 `C:\msys2\mingw64\bin` 等环境一并加入环境变量, 这些程序可以在脱离 `msys2` 的情况下独立使用. **
+**提醒: 如果需要在 `VSCode` 编译 `gcc`, 也可以将 `C:\msys2\mingw64\bin` 等环境一并加入环境变量, 这些程序可以在脱离 `msys2` 的情况下独立使用. **
 
 ## 实验: 使用 `gcc` 编译含依赖库的软件
 
@@ -92,20 +92,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 ```bash
 # MINGW64
-g++ 1.cpp -luser32 -mwindows -static-libgcc -static-libg++ -o 1.exe
+g++ 1.cpp -luser32 -mwindows -mwin32 -static-libgcc -static-libg++ -o 1.exe
 ./1.exe
 ```
 
 您应当能在屏幕中央看到 `Hello world` 的提示字样. 
 
+如果不能，请参照[此节](#UNICODE 说明)。
+
 ### 使用资源文件创建菜单栏, 对话框, 图标, 图片
 
-参考资料: https://zhuanlan.zhihu.com/p/161343829
+参考资料: <https://zhuanlan.zhihu.com/p/161343829>
 
 ```bash
 windres -J rc -O COFF source.rc target.res # 只有 COFF 是与 g++ 兼容的... 
 g++ -c main.cpp -o main.o 
-g++ target.res main.o -o final.exe
+g++ target.res main.o -o -lgdi32 -luser32 -O2 final.exe
 ```
 
 ```cpp
@@ -113,7 +115,7 @@ g++ target.res main.o -o final.exe
 //两个资源文件的宏
 #define IDB_BITMAP1 1001
 #define IDI_ICON    1002
-//2.cpp 
+//l2.cpp 
 #include <cstdio>
 #include <cstring>
 #include <windows.h>
@@ -121,28 +123,40 @@ g++ target.res main.o -o final.exe
 HBITMAP hBitmap;
 HINSTANCE g_Inst;
 char title_buffer[2048];
+void upd_title(HWND hwnd) {
+    RECT rect;
+    GetWindowRect(hwnd, &rect);
+    sprintf(title_buffer, "[My First Window] Img: %p\tL: %d\tR: %d\tT: %d\tB: %d", hBitmap, rect.left, rect.right, rect.top, rect.bottom);
+    SetWindowTextA(hwnd, title_buffer);
+}
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 		case WM_CREATE: {
-			hBitmap = LoadBitmapA(g_Inst, MAKEINTRESOURCEA(IDB_BITMAP1));
+             //GetObject(hBitmap, sizeof(BITMAP), &bmp);  //得到一个位图对象  
+			//hBitmap = LoadBitmapA(g_Inst, MAKEINTRESOURCEA(IDB_BITMAP1));
+             hBitmap = (HBITMAP)LoadImageA(g_Inst, MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 0, 0, NULL);
+             upd_title(hwnd);
 			break;
 		}
 		case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc = BeginPaint(hwnd, &ps);
 			HDC hMemDC = CreateCompatibleDC(hdc);
-			SelectObject(hMemDC, hBitmap);
-			RECT rect;
-			GetClientRect(hwnd, &rect);
-			sprintf(title_buffer, "[My First Window] L: %d\tR: %d\tT: %d\tB: %d", rect.left, rect.right, rect.top, rect.bottom);
-			SetWindowTextA(hwnd, title_buffer);
+			SelectObject(hMemDC, hBitmap); 
+             RECT rect;
+             GetClientRect(hwnd, &rect);
 			BitBlt(hdc, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hMemDC, 0, 0, SRCCOPY);
 			DeleteDC(hMemDC);
 			EndPaint(hwnd, &ps);
 			return true;
 		}
+        case WM_SIZE: {
+             upd_title(hwnd);
+             break;
+        }
 		case WM_DESTROY: {
-			PostQuitMessage(0);
+			DeleteObject(hBitmap);
+             PostQuitMessage(0);
 			break;
 		}
 		default: {
@@ -160,7 +174,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	do {
 		//Initialize
 		g_Inst = hInstance;
-
+		hBitmap = LoadImage(NULL, MAKEINTRESOURCEA(IDB_BITMAP1));
 	} while (0);
 	WNDCLASSEXA wc;
 	memset(&wc, 0, sizeof(wc));
@@ -196,10 +210,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 ```shell
 ///2.rc
 ///请准备好 2.bmp 和 2.ico
+///2.bmp 必须以 24 位保存 QwQ
+
 #include "2.h"
 IDB_BITMAP1 BITMAP "2.bmp"
 IDI_ICON ICON "2.ico"
-//其中好玩的是, 当.rc文件需要嵌套时, 可以使用BEGIN/END 或者 {}
+//其中好玩的是, 当 .rc 文件需要嵌套时, 可以使用 BEGIN/END 或者 {}
 ```
 
 
@@ -214,7 +230,7 @@ IDI_ICON ICON "2.ico"
 
 我们将稍微讲一下 `makefile` 文件的规则, 然后 `Talk is cheap, show me your code.` 
 
-![image-20230722154232145](./image-20230721-22.02.21.png)
+![image-20230722154232145](./msys2-win32-dev-resources/image-20230721-22.02.21.png)
 
 ### Dev-C++ Style
 
@@ -254,7 +270,7 @@ Light_Convenient_MCL_private.res: Light_Convenient_MCL_private.rc resources.rc
 
 ```
 
-### Windows SDK Style **(from v7.1)**
+### Windows SDK Style **(v7.1)**
 
 ```makefile
 # Nmake macros for building Win32 & Win64 apps
@@ -314,9 +330,127 @@ include $(MAKEROOT)/Makefiles/footer.makefile
 
 ```
 
+```makefile
+#转自 https://blog.csdn.net/kangkanglhb88008/article/details/118230189
+#这是C语言工程通用的makefile模板
+ 
+#赋值符号?=表示若变量没有赋值，则采用本次赋值，否则本次赋值无效
+CROSS_COMPILE 	?= arm-linux-gnueabihf-
+TARGET		  	?= bsp
+ 
+#赋值符号:=表示仅第一次赋值有效，后面对该变量的赋值无效
+CC 				:= $(CROSS_COMPILE)gcc
+LD				:= $(CROSS_COMPILE)ld
+OBJCOPY 		:= $(CROSS_COMPILE)objcopy
+OBJDUMP 		:= $(CROSS_COMPILE)objdump
+ 
+INCDIRS 		:= imx6ul \
+				   bsp/clk \
+				   bsp/led \
+				   bsp/delay 
+				   			   
+SRCDIRS			:= project \
+				   bsp/clk \
+				   bsp/led \
+				   bsp/delay 
+				   
+#内置函数$(patsubst <pattern>,<replacement>,<text>)，将text字符串中逐一单词中的pattern字符串采用replacement字符串替换
+#最后结果以空格分割开来，然后返回
+#因此，INCLUDE变量结果 -I project -I bsp/clk -I。。。
+ 
+INCLUDE			:= $(patsubst %, -I %, $(INCDIRS))
+ 
+#内置函数foreach，$(foreach <var>, <list>,<text>)，
+#把list字符串中单词逐一取出来放在var中，text中会对var进行处理，然后逐一以空格形式隔开存放起来，最后统一返回
+#内置函数wildcard用于通配符得到的结果字符串的展开（因为%通配符的话只有在规则中才会展开）
+#wildcard *.c 相当于%.c
+#因此，SFILES变量结果 project/xx.S bsp/clk/xx.S。。。
+ 
+SFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.S))
+CFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
+ 
+ 
+#内置函数notdir去掉目录，仅留下文件名
+#SFILENDIR变量结果 xx.S xx.S。。。
+ 
+SFILENDIR		:= $(notdir  $(SFILES))
+CFILENDIR		:= $(notdir  $(CFILES))
+ 
+ 
+#SFILENDIR:.S=.o 意思是 变量SFILENDIR中的 .S都替换为.o
+#SOBJS变量结果 obj/xx.o
+ 
+SOBJS			:= $(patsubst %, obj/%, $(SFILENDIR:.S=.o))
+COBJS			:= $(patsubst %, obj/%, $(CFILENDIR:.c=.o))
+OBJS			:= $(SOBJS) $(COBJS)
+ 
+#内置特殊变量“VPATH”，make会自动去找VPATH中的源文件（指xx.S,xx.c文件）
+VPATH			:= $(SRCDIRS)
+ 
+#定义clean伪操作
+.PHONY: clean
+	
+$(TARGET).bin : $(OBJS)
+	$(LD) -Timx6ul.lds -o $(TARGET).elf $^
+	$(OBJCOPY) -O binary -S $(TARGET).elf $@
+	$(OBJDUMP) -D -m arm $(TARGET).elf > $(TARGET).dis
+ 
+#-Wall: 打开所有需要注意的警告信息
+#-nostdlib: 不连接系统标准启动文件和标准库文件,只把指定的文件传递给连接器
+#makefile会自动在 内置变量VPATH 中去找%.S文件
+#还使用了静态模式<targets ...>: <target-pattern>: <prereq-patterns ...>
+#这里的<target-pattern> obj/%.o的作用就是只选取$(SOBJS)中%.o文件，这些文件构成集合
+#且依赖后面的vpath %.S文件
+$(SOBJS) : obj/%.o : %.S
+	$(CC) -Wall -nostdlib -c -O2  $(INCLUDE) -o $@ $<
+#上面使用了自动化变量后，会进行多条命令的执行了，也就是自动展开为
+# obj/1.o : project/1.S
+#	$(CC) -Wall -nostdlib -c -O2  $(INCLUDE) -o obj/1.o project/1.S
+# obj/2.o : project/2.S
+#	$(CC) -Wall -nostdlib -c -O2  $(INCLUDE) -o obj/2.o project/2.S
+# obj/3.o : project/3.S
+#	$(CC) -Wall -nostdlib -c -O2  $(INCLUDE) -o obj/3.o project/3.S
+#。。。
+ 
+#-Wall: 打开所有需要注意的警告信息
+#-nostdlib: 不连接系统标准启动文件和标准库文件,只把指定的文件传递给连接器
+#makefile会自动在 内置变量VPATH 中去找.c文件
+$(COBJS) : obj/%.o : %.c
+	$(CC) -Wall -nostdlib -c -O2  $(INCLUDE) -o $@ $<
+	
+clean:
+	rm -rf $(TARGET).elf $(TARGET).dis $(TARGET).bin $(COBJS) $(SOBJS)
+ 
+	
+```
+
+
+
 可见它们都是由变量(可略去), 命令两部分组成. 其中命令可以使用@避免输出, 跟 `Windows Command Processor` 有相似之处. 
 
+注意: `cmake`, `make`, `ninja`, `cargo` 语法不尽相同! `ninja` 是用来生成配置文件以调用其他几个的。
+
+
+
 所以用不用, 怎么写, 看你的了!
+
+```makefile
+# MinGW32-Make
+build_rc:
+windres -J rc -O COFF source.rc target.res # 只有 COFF 是与 g++ 兼容的...  
+build_source: 
+g++ -c main.cpp -o main.o 
+build_app:
+g++ target.res main.o -o bin/final.exe
+```
+
+## Unicode 说明
+
+因为历史原因，默认情况下，`gcc` 将会链接到 `ANSI` 版 `Windows API`。然而，`UNICODE` 发布后，因为宽字符版 `API` 效率更高，开发者们更倾向于使用 `UNICODE` 宽字符版 API。
+
+如果遇到 `Unicode` 问题，只需要在编译指令加一行 `-municode` 即可。
+
+注意: wWinMain !!
 
 ## 集成到终端
 
@@ -328,7 +462,7 @@ include $(MAKEROOT)/Makefiles/footer.makefile
 
 <!-- [图] -->
 
-![image-20230722154409960](./image-20230722154409960.png)
+![Directory Structure](./msys2-win32-dev-resources/image-20230722154409960.png)
 
 ```bash
 msys2_shell.cmd -mingw64 -defterm -here -no-start
@@ -352,4 +486,5 @@ msys2_shell.cmd -mingw64 -defterm -here -no-start
 
 <!-- [图] -->
 
-![image-20230722154454990](./image-20230721-21.45.22.png)
+![image-20230722154454990](./msys2-win32-dev-resources/image-20230721-21.45.22.png)
+
