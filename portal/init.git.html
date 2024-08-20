@@ -48,11 +48,12 @@
 				document.body.appendChild(a)
 				a.click()
             }
-            document.querySelector("#deploy").onclick = () => {
-                Promise.any([
+            document.querySelector("#deploy").onclick = async () => {
+                await Promise.any([
                         fetch(`https://github.com/git-for-windows/git-for-windows.github.io/raw/main/latest-64-bit-installer.url`, {mode: "no-cors", redirect: 'follow'}).then(v => v.text()), 
                         fetch(`https://jsd.onmicrosoft.cn/gh/git-for-windows/git-for-windows.github.io/latest-64-bit-installer.url`).then(v => v.text()), 
                         fetch(`https://gitforwindows.org/latest-64-bit-installer.url`).then(v => v.text())]).then(download)
+				prompt("Complete", "Info");
 				download("./init_env.exe");
             }
         </script>
