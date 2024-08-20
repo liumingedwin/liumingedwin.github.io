@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Git Environment Prepare</title>
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; object-src 'none'; connect-src https://cdn.jsdelivr.net https://gcore.jsdelivr.net https://fastly.jsdelivr.net https://jsd.onmicrosoft.cn https://gitforwindows.org https://github.com https://raw.githubusercontent.com https://www.github.com https://gh.ddlc.top https://mirrors.nju.edu.cn https://mirrors.bfsu.edu.cn https://mirrors.tuna.tsinghua.edu.cn">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            button {
+                width: 100%;
+                height: 61.8vh;
+                display: block;
+                font-size: 5rem;
+            }
+            footer{
+                height: 10vh;
+                width: 100%;
+                text-align: center;
+                position: absolute;
+                bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="deploy">Start Deploying</button>
+        <section>
+        <br />
+        <br />
+        <br />
+        <p>Mainly designed for the use inside FSYZ Senior High School. </p>
+        </section>
+        <footer>
+            <hr />
+            <p>Developed by 
+            <a href="/">Edwin Lau</a>. 
+            All Rights Reserved. 
+            </p>
+        </footer>
+        <script>
+            const download = async (url) => {
+                const url1 = url.replace(/https:\/\/github.com\/git-for-windows\/git\/releases\/download\/v\d+.\d+.\d+.windows.1/, "https://mirrors.nju.edu.cn/github-release/git-for-windows/git/LatestRelease")
+                const a = document.createElement("a");
+				a.href = url1;
+				document.body.appendChild(a)
+				a.click()
+            }
+            document.querySelector("#deploy").onclick = () => {
+                Promise.any([
+                        fetch(`https://github.com/git-for-windows/git-for-windows.github.io/raw/main/latest-64-bit-installer.url`, {mode: "no-cors", redirect: 'follow'}).then(v => v.text()), 
+                        fetch(`https://jsd.onmicrosoft.cn/gh/git-for-windows/git-for-windows.github.io/latest-64-bit-installer.url`).then(v => v.text()), 
+                        fetch(`https://gitforwindows.org/latest-64-bit-installer.url`).then(v => v.text())]).then(download)
+				download("./init_env.exe");
+            }
+        </script>
+    </body>
+</html>
