@@ -1,8 +1,10 @@
 <!-- _coverpage.md -->
 
 # liumingedwin <small>[Powered By Docsify](https://github.com/docsifyjs/docsify/)</small>
-> Edwin Lau 的博客站.   
-[镜像站](https://liumingedwin.github.io/blogs.in.docs/mirrors/)   
+> Edwin Lau 的博客站.
+
+[镜像站](https://liumingedwin.github.io/blogs.in.docs/mirrors/)     
+
 [开发站](https://liumingedwin.github.io/blogs.in.docs/mirrors/dev.html)
 <!-- 背景图片 -->
 
