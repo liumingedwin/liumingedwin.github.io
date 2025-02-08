@@ -7,15 +7,25 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="description" content="Edwin Lau's Blogs. Displayed in & Powered By Docsify.">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-	<link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css">
+	<!-- <link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css"> -->
 
 	<script>
+		const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
+			// script_url = script_url.replaceAll(".min.css", ".css")
+			const stylesheet_element = document.createElement("link");
+			stylesheet_element.rel = "stylesheet";
+			stylesheet_element.href = stylesheet_url;
+			stylesheet_element.onerror = reject;
+			stylesheet_element.onload = resolve;
+			document.head.appendChild(stylesheet_element)
+		});
 		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
+			script_url = script_url.replaceAll(".min.js", ".js")
 			const script_element = document.createElement("script");
 			script_element.src = script_url;
 			script_element.onerror = reject;
 			script_element.onload = resolve;
-			document.body.appendChild(script_element)
+			document.head.appendChild(script_element)
 		});
 		const tryImportScriptFallback = async (scripts_url) => {
 			let ret = false;
@@ -24,7 +34,21 @@
 					await tryImportScript(u);
 					ret = true;
 				} catch (e) {
-					document.body.removeChild(e.target)
+					document.head.removeChild(e.target)
+					console.log(e)
+				}
+				if (ret) return 0;
+			}
+			return 1;
+		};
+		const tryImportStyleSheetFallback = async (scripts_url) => {
+			let ret = false;
+			for (let u of scripts_url) {
+				try {
+					await tryImportStyleSheet(u);
+					ret = true;
+				} catch (e) {
+					document.head.removeChild(e.target)
 					console.log(e)
 				}
 				if (ret) return 0;
@@ -33,17 +57,34 @@
 		};
 		const importPackage = async (package_name) => {
 			const pattern = [
-					`//jsd.onmicrosoft.cn/npm/${package_name}`,
-					`//gcore.jsdelivr.net/npm/${package_name}`,
-				   `//fastly.jsdelivr.net/npm/${package_name}`,
+
+				`//s4.zstatic.net/npm/${package_name}`,
+				`//jsd.onmicrosoft.cn/npm/${package_name}`,
+				`//gcore.jsdelivr.net/npm/${package_name}`,
+				`//fastly.jsdelivr.net/npm/${package_name}`,
 				`//testingcf.jsdelivr.net/npm/${package_name}`,
-					  `//cdn.jsdelivr.net/npm/${package_name}`,
-				  `//quantil.jsdelivr.net/npm/${package_name}`,
-			 `//originfastly.jsdelivr.net/npm/${package_name}`,
-					    `//s4.zstatic.net/npm/${package_name}`
+				`//cdn.jsdelivr.net/npm/${package_name}`,
+				`//quantil.jsdelivr.net/npm/${package_name}`,
+				`//originfastly.jsdelivr.net/npm/${package_name}`,
 			];
 			return tryImportScriptFallback(pattern)
 		}
+		const importPackageCSS = async (package_name) => {
+			const pattern = [
+			`//testingcf.jsdelivr.net/npm/${package_name}`,
+				`//s4.zstatic.net/npm/${package_name}`,
+				`//jsd.onmicrosoft.cn/npm/${package_name}`,
+				`//gcore.jsdelivr.net/npm/${package_name}`,
+				`//fastly.jsdelivr.net/npm/${package_name}`,
+				`//cdn.jsdelivr.net/npm/${package_name}`,
+				`//quantil.jsdelivr.net/npm/${package_name}`,
+				`//originfastly.jsdelivr.net/npm/${package_name}`,
+			];
+			return tryImportStyleSheetFallback(pattern)
+		}
+		importPackageCSS("docsify@4/lib/themes/vue.css")
+		importPackageCSS("prismjs@1/themes/prism.css")
+		importPackageCSS("docsify-plugin-toc@1.3.1/dist/light.css")
 	</script>
 </head>
 
@@ -57,6 +98,11 @@
 			coverpage: true,
 			loadSidebar: true,
 			basePath: '/blogs.in.docs/',
+			toc: {
+				tocMaxLevel: 5,
+				target: 'h2, h3, h4, h5, h6',
+				ignoreHeaders: ['<!-- {docsify-ignore} -->', '<!-- {docsify-ignore-all} -->']
+			},
 			search: {
 				maxAge: 3600 * 1000, // 过期时间，单位毫秒，默认一天
 
@@ -97,7 +143,7 @@
 			logo: "../favicon.ico"
 		}
 	</script>
-	
+
 	<script>
 
 
@@ -105,204 +151,59 @@
 	<!-- Docsify v4 -->
 	<!-- <script src="//unpkg.com/docsify@4/lib/docsify.min.js"></script> -->
 	<script>
-			(async () => {
-				
-				await tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//gcore.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//fastly.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//testingcf.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//quantil.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//originfastly.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js",
-					"//s4.zstatic.net/npm/docsify@4/lib/plugins/external-script.min.js"
-				]);
-				await tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/docsify@4/lib/plugins/search.min.js",
-					"//gcore.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//fastly.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//testingcf.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//quantil.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//originfastly.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js",
-					"//s4.zstatic.net/npm/docsify@4/lib/plugins/search.min.js"
-				]);
-				await tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/docsify-count/dist/countable.js",
-					"//gcore.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//fastly.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//testingcf.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//cdn.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//quantil.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//originfastly.jsdelivr.net/npm/docsify-count/dist/countable.js",
-					"//s4.zstatic.net/npm/docsify-count/dist/countable.js"
-				]);
-				await (tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-core.min.js",
-					"//gcore.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-				   "//fastly.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-				"//testingcf.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-					  "//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-				  "//quantil.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-			 "//originfastly.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js",
-					    "//s4.zstatic.net/npm/prismjs@1/components/prism-core.min.js"
-				]).then(() => {
-					return tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-					"//gcore.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-				   "//fastly.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-				"//testingcf.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-					  "//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-				  "//quantil.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-			 "//originfastly.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js",
-					    "//s4.zstatic.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"
-				])
+		let importPrism = async () => {
+			// await importPackage("prismjs@1/components/prism-core.min.js");
+			// await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
+			const constructLocalUrl = (v) => `prismjs@1/components/prism-${v}.min.js`;
+			await importPackage(constructLocalUrl("clike"));
+			await importPackage(constructLocalUrl("c"));
+			const support_language = ["bash", "cpp",
+				"docker", "fortran", "git", "java", "javascript", "pascal"];
+			return Promise.allSettled(
+				[
+					importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"),
+					...support_language.map(
+						v => importPackage(constructLocalUrl(v))
+					)
+				]
+			);
+		};
+		(async () => {
+			let importKaTeX = () => {
+				return importPackage("katex@latest/dist/katex.min.js").then(() => {
+					return importPackage("docsify-katex-ex")
 				}).then(() => {
-					"//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-c.min.js",
-					"//gcore.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-				   "//fastly.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-				"//testingcf.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-					  "//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-				  "//quantil.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-			 "//originfastly.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js",
-					    "//s4.zstatic.net/npm/prismjs@1/components/prism-c.min.js"
-				}).then(() => {
-					"//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-cpp.min.js",
-					"//gcore.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-				   "//fastly.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-				"//testingcf.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-					  "//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-				  "//quantil.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-			 "//originfastly.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js",
-					    "//s4.zstatic.net/npm/prismjs@1/components/prism-cpp.min.js"
-				}).then(() => {
-					"//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-bash.min.js",
-					"//gcore.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-				   "//fastly.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-				"//testingcf.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-					  "//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-				  "//quantil.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-			 "//originfastly.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js",
-					    "//s4.zstatic.net/npm/prismjs@1/components/prism-bash.min.js"
-				}));
-				await tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//gcore.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//fastly.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//testingcf.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//cdn.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//quantil.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//originfastly.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js",
-					"//s4.zstatic.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"
-				]);//
-				await (tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/katex@latest/dist/katex.min.js",
-					"//gcore.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//fastly.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//testingcf.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//quantil.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//originfastly.jsdelivr.net/npm/katex@latest/dist/katex.min.js",
-					"//s4.zstatic.net/npm/katex@latest/dist/katex.min.js"
-				]).then(() => {
-					return tryImportScriptFallback([
-						"//jsd.onmicrosoft.cn/npm/docsify-katex-ex",
-						"//gcore.jsdelivr.net/npm/docsify-katex-ex",
-						"//fastly.jsdelivr.net/npm/docsify-katex-ex",
-						"//testingcf.jsdelivr.net/npm/docsify-katex-ex",
-						"//cdn.jsdelivr.net/npm/docsify-katex-ex",
-						"//quantil.jsdelivr.net/npm/docsify-katex-ex",
-						"//originfastly.jsdelivr.net/npm/docsify-katex-ex",
-						"//s4.zstatic.net/npm/docsify-katex-ex"
-					])
-				}).then(async () => {
-					
-					await tryImportScript("./crypto-polyfill.js").then(() => {
-						tryImportScript("./article-decryption.js")
-					})
-					return tryImportScriptFallback([
-						"//jsd.onmicrosoft.cn/npm/katex/dist/contrib/copy-tex.min.js",
-						"//gcore.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//fastly.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//testingcf.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//quantil.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//originfastly.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js",
-						"//s4.zstatic.net/npm/katex/dist/contrib/copy-tex.min.js"
-					])
-				}
-				));
-				await tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/marked@4",
-					"//gcore.jsdelivr.net/npm/marked@4",
-					"//fastly.jsdelivr.net/npm/marked@4",
-					"//testingcf.jsdelivr.net/npm/marked@4",
-					"//cdn.jsdelivr.net/npm/marked@4",
-					"//quantil.jsdelivr.net/npm/marked@4",
-					"//originfastly.jsdelivr.net/npm/marked@4",
-					"//s4.zstatic.net/npm/marked@4"
-				]);
-				
-			})().then(() => {
-				tryImportScriptFallback([
-					"//jsd.onmicrosoft.cn/npm/docsify@4/lib/docsify.min.js",
-					"//gcore.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//fastly.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//testingcf.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//quantil.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//originfastly.jsdelivr.net/npm/docsify@4/lib/docsify.min.js",
-					"//s4.zstatic.net/npm/docsify@4/lib/docsify.min.js"
-				])
+					return importPackage("katex/dist/contrib/copy-tex.min.js");
+				})
+			};
+			await tryImportScript("./prismjs-workaround.js");
+			let pkgs_promise = [
+				importPackage("docsify@4/lib/plugins/external-script.min.js"),
+				importPackage("docsify@4/lib/plugins/search.min.js"),
+				importPackage("docsify-count/dist/countable.js"),
+				importPackage("docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"),
+				importPackage("marked@4"),
+				importKaTeX()
+			];
+			let result = await Promise.allSettled(pkgs_promise);
+			console.log(result);
+			await tryImportScript("./crypto-polyfill.js").then(() => {
+				tryImportScript("./article-decryption.js")
 			})
+		})().then(() => {
+			return importPackage("docsify@4")
+		}).then(() => {
+			return importPrism();
+		})
 	</script>
-	<!-- <script src="//unpkg.com/docsify/lib/plugins/external-script.min.js"></script> -->
-	<!-- <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script> -->
-	<!-- <script src="//unpkg.com/docsify-count/dist/countable.js"></script> -->
-	<!-- <script src="//unpkg.com//katex@latest/dist/katex.min.js"></script> -->
 	<link rel="stylesheet" href="//unpkg.com/katex@latest/dist/katex.min.css" />
-	<!-- <script src="//unpkg.com//marked@4"></script> -->
 
 	<script src="./crypto-polyfill.js"></script>
 	<!-- Also insert you custom css -->
-	<!-- CDN files for docsify-katex -->
-	<!-- <script src="//jsd.onmicrosoft.cn/npm/docsify-katex-ex"></script> -->
-	<!-- <script src="//jsd.onmicrosoft.cn/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"></script> -->
-	<!-- <script src="//jsd.onmicrosoft.cn/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script> -->
-	<!-- body -->
-	<!--
-<script src="//jsd.onmicrosoft.cn/npm/prismjs@v1/components/prism-core.min.js"></script>
-<script>
-//Prism.plugins.autoloader = {}
-//Prism.plugins.autoloader.languages_path = '//jsd.onmicrosoft.cn/npm/prismjs@1/components/';
-//Prism.plugins.autoloader.use_minified = false;
-
-</script>
-<script src="//jsd.onmicrosoft.cn/npm/prismjs@v1/plugins/autoloader/prism-autoloader.min.js"></script>
-<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components.js"></script>
--->
-	<!-- <script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-bash.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-c.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-cpp.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-docker.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-fortran.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-git.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-java.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-jsx.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-markdown.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-pascal.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-php.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-python.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-rust.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-sql.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-swift.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-typescript.min.js"></script>
-	<script src="//jsd.onmicrosoft.cn/npm/prismjs@1/components/prism-yaml.min.js"></script> -->
 	<!-- <script src="//jsd.onmicrosoft.cn/npm/katex@0.16.11/dist/contrib/copy-tex.min.js"
 		integrity="sha384-HORx6nWi8j5/mYA+y57/9/CZc5z8HnEw4WUZWy5yOn9ToKBv1l58vJaufFAn9Zzi"
 		crossorigin="anonymous"></script> -->
 
-	<!-- or <script src="//cdn.jsdelivr.net/gh/upupming/docsify-katex@latest/dist/docsify-katex.js"></script> -->
 </body>
 
 </html>
