@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//jsd.onmicrosoft.cn/npm/crypto-js/crypto-js.min.js"></script>
+<script>
+function encryptText() {
+    let plaind = document.getElementById("plaint").value;
+    let encrypted = CryptoJS.AES.encrypt(plaind, prompt("Password: ", "paraphrase"));
+    document.getElementById("encrypted").value = encrypted;
+}
+
+function decryptText() {
+    let encrypted = document.getElementById("todecrypt").value;
+    console.log("encrypted: " + encrypted);
+    let decrypted = CryptoJS.AES.decrypt(encrypted, prompt("Password: ", "paraphrase")).toString(CryptoJS.enc.Utf8);
+    console.log("decrypted: " + decrypted);
+    document.getElementById("decrypted").value = decrypted;
+}
+
+
+</script>
+</head>
+<body>
+    <h1>Encryption & Decryption</h1>
+    AES128，ECB模式，PaddingModeZeros，不足部分补0
+    <br>
+    <textarea id="plaint" style="width:500px; height:500px;">
+
+    </textarea>
+        <button type="button" onclick="encryptText()">加密</button>
+    <textarea id="encrypted" style="width:500px; height:500px;"></textarea>
+    <br>
+    <br>
+    <br>
+    <textarea id="todecrypt" style="width:500px; height:500px;"></textarea>
+        <button type="button" onclick="decryptText()">解密</button>
+    <textarea id="decrypted" style="width:500px; height:500px;"></textarea>
+</body>
+</html>
