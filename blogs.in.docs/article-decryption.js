@@ -7,7 +7,8 @@ window.$docsify.plugins = window.$docsify.plugins || [];
             const defprefix = "aes";
             if (scontent.indexOf(defprefix) != 0)
                 return scontent;
-            return CryptoJS.AES.decrypt(String.prototype.replace.call(scontent, defprefix, ""), prompt("Input: ", "password")).toString(CryptoJS.enc.Utf8)
+            console.log(String.prototype.replace.call(scontent, defprefix, ""))
+            return CryptoJS.AES.decrypt(String.prototype.replace.call(scontent, defprefix, "").replaceAll(/\s/g,''), prompt("Input: ", "password")).toString(CryptoJS.enc.Utf8)
                 ;
         })
     };
