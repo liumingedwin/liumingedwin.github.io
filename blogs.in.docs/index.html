@@ -7,6 +7,24 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="description" content="Edwin Lau's Blogs. Displayed in & Powered By Docsify.">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<link rel="preconnect" href="https://fastly.jsdelivr.net">
+	<link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin="anonymous">
+	<link rel="preconnect" href="https://gcore.jsdelivr.net">
+	<link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin="anonymous">
+	<link rel="preconnect" href="https://testingcf.jsdelivr.net">
+	<link rel="preconnect" href="https://testingcf.jsdelivr.net" crossorigin="anonymous">
+	<link rel="preconnect" href="http://testingcf.jsdelivr.net">
+	<link rel="preconnect" href="http://testingcf.jsdelivr.net" crossorigin="anonymous">
+	<link rel="preconnect" href="https://lf6-unpkg.zstaticcdn.com">
+	<link rel="preconnect" href="https://lf6-unpkg.zstaticcdn.com" crossorigin="anonymous">
+	<link rel="preconnect" href="https://z4.zstatic.net">
+	<link rel="preconnect" href="https://z4.zstatic.net" crossorigin="anonymous">
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+	<link rel="preload" href="./prismjs-workaround.js" as="script" />
+	<link rel="preload" href="./crypto-polyfill.js" as="script" />
+	<link rel="preload" href="./article-decryption.js" as="script" />
+	
 	<!-- <link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css"> -->
 	<style>
 		.markdown-section pre:after {
@@ -14,84 +32,6 @@
 			text-align: left!important;
 		}
 	</style>
-	<script>
-		const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
-			// script_url = script_url.replaceAll(".min.css", ".css")
-			const stylesheet_element = document.createElement("link");
-			stylesheet_element.rel = "stylesheet";
-			stylesheet_element.href = stylesheet_url;
-			stylesheet_element.onerror = reject;
-			stylesheet_element.onload = resolve;
-			document.head.appendChild(stylesheet_element);
-		});
-		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
-			script_url = script_url.replaceAll(".min.js", ".js")
-			const script_element = document.createElement("script");
-			script_element.src = script_url;
-			script_element.onerror = reject;
-			script_element.onload = resolve;
-			document.head.appendChild(script_element);
-		});
-		const tryImportScriptFallback = async (scripts_url) => {
-			let ret = false;
-			for (let u of scripts_url) {
-				try {
-					await tryImportScript(u);
-					ret = true;
-				} catch (e) {
-					document.head.removeChild(e.target);
-					console.log(e);
-				}
-				if (ret) return 0;
-			}
-			return 1;
-		};
-		const tryImportStyleSheetFallback = async (scripts_url) => {
-			let ret = false;
-			for (let u of scripts_url) {
-				try {
-					await tryImportStyleSheet(u);
-					ret = true;
-				} catch (e) {
-					document.head.removeChild(e.target);
-					console.log(e);
-				}
-				if (ret) return 0;
-			}
-			return 1;
-		};
-		const importPackage = async (package_name) => {
-			const pattern = [
-
-				`//s4.zstatic.net/npm/${package_name}`,
-				`//jsd.onmicrosoft.cn/npm/${package_name}`,
-				`//gcore.jsdelivr.net/npm/${package_name}`,
-				`//fastly.jsdelivr.net/npm/${package_name}`,
-				`//testingcf.jsdelivr.net/npm/${package_name}`,
-				`//cdn.jsdelivr.net/npm/${package_name}`,
-				`//quantil.jsdelivr.net/npm/${package_name}`,
-				`//originfastly.jsdelivr.net/npm/${package_name}`,
-			];
-			return tryImportScriptFallback(pattern);
-		};
-		const importPackageCSS = async (package_name) => {
-			const pattern = [
-			`//testingcf.jsdelivr.net/npm/${package_name}`,
-				`//s4.zstatic.net/npm/${package_name}`,
-				`//jsd.onmicrosoft.cn/npm/${package_name}`,
-				`//gcore.jsdelivr.net/npm/${package_name}`,
-				`//fastly.jsdelivr.net/npm/${package_name}`,
-				`//cdn.jsdelivr.net/npm/${package_name}`,
-				`//quantil.jsdelivr.net/npm/${package_name}`,
-				`//originfastly.jsdelivr.net/npm/${package_name}`,
-			];
-			return tryImportStyleSheetFallback(pattern);
-		};
-		importPackageCSS("docsify@4/lib/themes/vue.css");
-		importPackageCSS("prismjs@1/themes/prism.css");
-		importPackageCSS("docsify-plugin-toc@1.3.1/dist/light.css");
-		importPackageCSS("prismjs@1/plugins/toolbar/prism-toolbar.min.css")
-	</script>
 </head>
 
 <body>
@@ -190,9 +130,8 @@
 			let pkgs_promise = [
 				importPackage("docsify@4/lib/plugins/external-script.min.js"),
 				importPackage("docsify@4/lib/plugins/search.min.js"),
-				importPackage("docsify-count/dist/countable.js"),
+				importPackage("docsify-count/dist/countable.min.js"),
 				importPackage("docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"),
-				importPackage("marked@4/marked.min.js"),
 				importKaTeX()
 			];
 			let result = await Promise.allSettled(pkgs_promise);
@@ -208,7 +147,85 @@
 			return importPrism();
 		})
 	</script>
-	<link rel="stylesheet" href="//unpkg.com/katex@latest/dist/katex.min.css" />
+	<script>
+		const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
+			// script_url = script_url.replaceAll(".min.css", ".css")
+			const stylesheet_element = document.createElement("link");
+			stylesheet_element.rel = "stylesheet";
+			stylesheet_element.href = stylesheet_url;
+			stylesheet_element.onerror = reject;
+			stylesheet_element.onload = resolve;
+			document.head.appendChild(stylesheet_element);
+		});
+		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
+			script_url = script_url.replaceAll(".min.js", ".js")
+			const script_element = document.createElement("script");
+			script_element.src = script_url;
+			script_element.onerror = reject;
+			script_element.onload = resolve;
+			document.head.appendChild(script_element);
+		});
+		const tryImportScriptFallback = async (scripts_url) => {
+			let ret = false;
+			for (let u of scripts_url) {
+				try {
+					await tryImportScript(u);
+					ret = true;
+				} catch (e) {
+					document.head.removeChild(e.target);
+					console.log(e);
+				}
+				if (ret) return 0;
+			}
+			return 1;
+		};
+		const tryImportStyleSheetFallback = async (scripts_url) => {
+			let ret = false;
+			for (let u of scripts_url) {
+				try {
+					await tryImportStyleSheet(u);
+					ret = true;
+				} catch (e) {
+					document.head.removeChild(e.target);
+					console.log(e);
+				}
+				if (ret) return 0;
+			}
+			return 1;
+		};
+		const importPackage = async (package_name) => {
+			const pattern = [
+
+				`//s4.zstatic.net/npm/${package_name}`,
+				`//jsd.onmicrosoft.cn/npm/${package_name}`,
+				`//gcore.jsdelivr.net/npm/${package_name}`,
+				`//fastly.jsdelivr.net/npm/${package_name}`,
+				`//testingcf.jsdelivr.net/npm/${package_name}`,
+				`//cdn.jsdelivr.net/npm/${package_name}`,
+				`//quantil.jsdelivr.net/npm/${package_name}`,
+				`//originfastly.jsdelivr.net/npm/${package_name}`,
+			];
+			return tryImportScriptFallback(pattern);
+		};
+		const importPackageCSS = async (package_name) => {
+			const pattern = [
+			`//testingcf.jsdelivr.net/npm/${package_name}`,
+				`//s4.zstatic.net/npm/${package_name}`,
+				`//jsd.onmicrosoft.cn/npm/${package_name}`,
+				`//gcore.jsdelivr.net/npm/${package_name}`,
+				`//fastly.jsdelivr.net/npm/${package_name}`,
+				`//cdn.jsdelivr.net/npm/${package_name}`,
+				`//quantil.jsdelivr.net/npm/${package_name}`,
+				`//originfastly.jsdelivr.net/npm/${package_name}`,
+			];
+			return tryImportStyleSheetFallback(pattern);
+		};
+		importPackageCSS("docsify@4/lib/themes/vue.min.css");
+		importPackageCSS("prismjs@1/themes/prism.min.css");
+		importPackageCSS("docsify-plugin-toc@1.3.1/dist/light.min.css");
+		importPackageCSS("prismjs@1/plugins/toolbar/prism-toolbar.min.css")
+		importPackageCSS("katex@latest/dist/katex.min.css")
+	</script>
 
 	<!-- Also insert you custom css -->
 	<!-- <script src="//jsd.onmicrosoft.cn/npm/katex@0.16.11/dist/contrib/copy-tex.min.js"
