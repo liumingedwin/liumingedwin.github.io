@@ -100,6 +100,45 @@
 	<!-- Docsify v4 -->
 	<!-- <script src="//unpkg.com/docsify@4/lib/docsify.min.js"></script> -->
 	<script>
+		
+		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
+			script_url = script_url.replaceAll(".min.js", ".js")
+			const script_element = document.createElement("script");
+			script_element.src = script_url;
+			script_element.onerror = reject;
+			script_element.onload = resolve;
+			document.head.appendChild(script_element);
+		});
+		const tryImportScriptFallback = async (scripts_url) => {
+			let ret = false;
+			for (let u of scripts_url) {
+				try {
+					await tryImportScript(u);
+					ret = true;
+				} catch (e) {
+					document.head.removeChild(e.target);
+					console.log(e);
+				}
+				if (ret) return 0;
+			}
+			return 1;
+		};
+		
+		const importPackage = async (package_name) => {
+			const pattern = [
+
+				`//s4.zstatic.net/npm/${package_name}`,
+				`//jsd.onmicrosoft.cn/npm/${package_name}`,
+				`//gcore.jsdelivr.net/npm/${package_name}`,
+				`//fastly.jsdelivr.net/npm/${package_name}`,
+				`//testingcf.jsdelivr.net/npm/${package_name}`,
+				`//cdn.jsdelivr.net/npm/${package_name}`,
+				`//quantil.jsdelivr.net/npm/${package_name}`,
+				`//originfastly.jsdelivr.net/npm/${package_name}`,
+			];
+			return tryImportScriptFallback(pattern);
+		};
+		
 		let importPrism = async () => {
 			// await importPackage("prismjs@1/components/prism-core.min.js");
 			// await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
@@ -148,6 +187,7 @@
 		})
 	</script>
 	<script>
+		
 		const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
 			// script_url = script_url.replaceAll(".min.css", ".css")
 			const stylesheet_element = document.createElement("link");
@@ -157,28 +197,6 @@
 			stylesheet_element.onload = resolve;
 			document.head.appendChild(stylesheet_element);
 		});
-		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
-			script_url = script_url.replaceAll(".min.js", ".js")
-			const script_element = document.createElement("script");
-			script_element.src = script_url;
-			script_element.onerror = reject;
-			script_element.onload = resolve;
-			document.head.appendChild(script_element);
-		});
-		const tryImportScriptFallback = async (scripts_url) => {
-			let ret = false;
-			for (let u of scripts_url) {
-				try {
-					await tryImportScript(u);
-					ret = true;
-				} catch (e) {
-					document.head.removeChild(e.target);
-					console.log(e);
-				}
-				if (ret) return 0;
-			}
-			return 1;
-		};
 		const tryImportStyleSheetFallback = async (scripts_url) => {
 			let ret = false;
 			for (let u of scripts_url) {
@@ -192,20 +210,6 @@
 				if (ret) return 0;
 			}
 			return 1;
-		};
-		const importPackage = async (package_name) => {
-			const pattern = [
-
-				`//s4.zstatic.net/npm/${package_name}`,
-				`//jsd.onmicrosoft.cn/npm/${package_name}`,
-				`//gcore.jsdelivr.net/npm/${package_name}`,
-				`//fastly.jsdelivr.net/npm/${package_name}`,
-				`//testingcf.jsdelivr.net/npm/${package_name}`,
-				`//cdn.jsdelivr.net/npm/${package_name}`,
-				`//quantil.jsdelivr.net/npm/${package_name}`,
-				`//originfastly.jsdelivr.net/npm/${package_name}`,
-			];
-			return tryImportScriptFallback(pattern);
 		};
 		const importPackageCSS = async (package_name) => {
 			const pattern = [
