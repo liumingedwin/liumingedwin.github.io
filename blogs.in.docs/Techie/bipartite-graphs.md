@@ -26,7 +26,7 @@ bool judge_all(void) {
 		if(judge_single(i) == false) return false;
 	}
 	return true;
-
+}
 
 
 //bfs method
