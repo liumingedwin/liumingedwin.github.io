@@ -7,6 +7,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="description" content="Edwin Lau's Blogs. Displayed in & Powered By Docsify.">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<link rel="preconnect" href="https://jsd.onmicrosoft.cn">
+	<link rel="preconnect" href="https://jsd.onmicrosoft.cn" crossorigin="anonymous">
 	<link rel="preconnect" href="https://fastly.jsdelivr.net">
 	<link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin="anonymous">
 	<link rel="preconnect" href="https://gcore.jsdelivr.net">
@@ -17,6 +19,10 @@
 	<link rel="preconnect" href="http://testingcf.jsdelivr.net" crossorigin="anonymous">
 	<link rel="preconnect" href="https://lf6-unpkg.zstaticcdn.com">
 	<link rel="preconnect" href="https://lf6-unpkg.zstaticcdn.com" crossorigin="anonymous">
+	<link rel="preconnect" href="https://quantil.jsdelivr.net">
+	<link rel="preconnect" href="https://quantil.jsdelivr.net" crossorigin="anonymous">
+	<link rel="preconnect" href="https://originfastly.jsdelivr.net">
+	<link rel="preconnect" href="https://originfastly.jsdelivr.net" crossorigin="anonymous">
 	<link rel="preconnect" href="https://z4.zstatic.net">
 	<link rel="preconnect" href="https://z4.zstatic.net" crossorigin="anonymous">
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -24,15 +30,16 @@
 	<link rel="preload" href="./prismjs-workaround.js" as="script" />
 	<link rel="preload" href="./crypto-polyfill.js" as="script" />
 	<link rel="preload" href="./article-decryption.js" as="script" />
-	
+
 	<!-- <link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css"> -->
 	<style>
 		.markdown-section pre:after {
-			left: 0!important;
-			text-align: left!important;
+			left: 0 !important;
+			text-align: left !important;
 		}
-		.markdown-section pre > code {
-			padding: 0.2em 5px 0em 5px!important;
+
+		.markdown-section pre>code {
+			padding: 0 !important;
 		}
 	</style>
 </head>
@@ -49,7 +56,7 @@
 			coverpage: true,
 			loadSidebar: true,
 			basePath: '/blogs.in.docs/',
-			catchPluginErrors: false, 
+			catchPluginErrors: false,
 			toc: {
 				tocMaxLevel: 5,
 				target: 'h2, h3, h4, h5, h6',
@@ -103,15 +110,18 @@
 	<!-- Docsify v4 -->
 	<!-- <script src="//unpkg.com/docsify@4/lib/docsify.min.js"></script> -->
 	<script>
-		
 		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
-			script_url = script_url.replaceAll(".min.js", ".js")
+			//.replace(/(?<!\.min)\.js$/i, '.min.js');
+			if((!script_url.endsWith(".min.js")) && script_url.endsWith(".js") && script_url.includes("jsdelivr")) script_url = script_url.replace(/\.js$/, '.min.js');
+			// script_url = script_url.replaceAll(".min.js", ".js")
 			const script_element = document.createElement("script");
+			script_element.crossorigin = "anouymous";
 			script_element.src = script_url;
 			script_element.onerror = reject;
 			script_element.onload = resolve;
 			document.head.appendChild(script_element);
 		});
+
 		const tryImportScriptFallback = async (scripts_url) => {
 			let ret = false;
 			for (let u of scripts_url) {
@@ -126,112 +136,160 @@
 			}
 			return 1;
 		};
-		
-		const importPackage = async (package_name) => {
-			const pattern = [
-
-				`//s4.zstatic.net/npm/${package_name}`,
-				`//jsd.onmicrosoft.cn/npm/${package_name}`,
-				`//gcore.jsdelivr.net/npm/${package_name}`,
-				`//fastly.jsdelivr.net/npm/${package_name}`,
-				`//testingcf.jsdelivr.net/npm/${package_name}`,
-				`//cdn.jsdelivr.net/npm/${package_name}`,
-				`//quantil.jsdelivr.net/npm/${package_name}`,
-				`//originfastly.jsdelivr.net/npm/${package_name}`,
-			];
-			return tryImportScriptFallback(pattern);
-		};
-		
-		let importPrism = async () => {
-			// await importPackage("prismjs@1/components/prism-core.min.js");
-			// await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
-			const constructLocalUrl = (v) => `prismjs@1/components/prism-${v}.min.js`;
-			await importPackage(constructLocalUrl("clike"));
-			await importPackage(constructLocalUrl("c"));
-			const support_language = ["bash", "cpp",
-				"docker", "fortran", "git", "java", "javascript", "pascal"];
-			return Promise.allSettled(
-				[
-					importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"),
-					importPackage("prismjs@1/plugins/toolbar/prism-toolbar.min.js").then(() => {return importPackage("prismjs@1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")}),  
-
-					...support_language.map(
-						v => importPackage(constructLocalUrl(v))
-					)
-				]
-			);
-		};
-		(async () => {
-			let importKaTeX = () => {
-				return importPackage("katex@latest/dist/katex.min.js").then(() => {
-					return importPackage("docsify-katex-ex")
-				}).then(() => {
-					return importPackage("katex/dist/contrib/copy-tex.min.js");
-				})
+		let counter = 0;
+		const pattern_old = [
+			// `//s4.zstatic.net/ajax/libs/`,
+			`//unpkg.com/`,
+			`//jsd.onmicrosoft.cn/npm/`,
+			`//gcore.jsdelivr.net/npm/`,
+			`//fastly.jsdelivr.net/npm/`,
+			`//testingcf.jsdelivr.net/npm/`,
+			`//cdn.jsdelivr.net/npm/`,
+			`//quantil.jsdelivr.net/npm/`,
+			`//originfastly.jsdelivr.net/npm/`,
+			`//s4.zstatic.net/npm/`,
+		];
+		let rnk = {};
+		for (let i of pattern_old) if(pattern_old[i]) rnk[pattern_old[i]] = 998244353;
+		let promises = [
+			// tryImportScript("https://s4.zstatic.net/ajax/libs/cdnjs-test-package-git/0.0.7/index.js").then(() => {
+			// 	counter++;
+			// 	rnk["//s4.zstatic.net/ajax/libs/"] = counter;
+			// }),
+			tryImportScript("https://unpkg.com/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//unpkg.com/"] = counter;
+			}).catch(() => new Promise(() => 0)), 
+			tryImportScript("https://jsd.onmicrosoft.cn/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//jsd.onmicrosoft.cn/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://gcore.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//gcore.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://fastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//fastly.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://testingcf.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//testingcf.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://cdn.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//cdn.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://quantil.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//quantil.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://originfastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//originfastly.jsdelivr.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0)),
+			tryImportScript("https://s4.zstatic.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+				counter++;
+				return rnk["//s4.zstatic.net/npm/"] = counter;
+			}).catch(() => new Promise(() => 0))
+		];
+		Promise.race(promises).then((res) => {
+			console.log("Run for: %d", performance.now())
+			const pattern = pattern_old.sort((a, b) => rnk[a] - rnk[b]);
+			console.log(pattern, rnk);
+			const importPackage = async (package_name) => {
+				return tryImportScriptFallback(pattern.map(v => v + package_name));
 			};
-			let pkgs_promise = [
-				importPackage("docsify@4/lib/plugins/external-script.min.js"),
-				importPackage("docsify@4/lib/plugins/search.min.js"),
-				importPackage("docsify-count/dist/countable.min.js"),
-				importPackage("docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"),
-				importKaTeX()
-			];
-			let result = await Promise.allSettled(pkgs_promise);
-			console.log(result);
-			await tryImportScript("./crypto-polyfill.js").then(() => {
-				return tryImportScript("./article-decryption.js")
+			let importPrism = async () => {
+				// await importPackage("prismjs@1/components/prism-core.min.js");
+				// await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
+				const constructLocalUrl = (v) => `prismjs@1/components/prism-${v}.min.js`;
+				const support_language = ["bash", "css",
+					"docker", "fortran", "git", "ini", "java",
+					"javascript", "jsstacktrace",
+					"latex", "markdown", "nsis", "pascal", "php", "python",
+					"sql", "toml", "typescript", "vim", "visual-basic", "yaml"];
+				return Promise.allSettled(
+					[
+						importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"),
+						importPackage("prismjs@1/plugins/toolbar/prism-toolbar.min.js").then(() =>
+							importPackage("prismjs@1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js") 
+						),
+							importPackage(constructLocalUrl("clike")).catch(console.warn)
+						.then(() => importPackage(constructLocalUrl("c"))).catch(console.warn)
+						.then(() => importPackage(constructLocalUrl("cpp"))).catch(console.warn), 
+							importPackage(constructLocalUrl("json"))
+						.then(() => Promise.allSettled(() => importPackage(constructLocalUrl("json5")), () => importPackage(constructLocalUrl("jsonp")))), 
+						...support_language.map(
+							v => importPackage(constructLocalUrl(v))
+						)
+					]
+				);
+			};
+			(async () => {
+				let importKaTeX = () => {
+					return importPackage("katex@latest/dist/katex.min.js").then(() => {
+						return importPackage("docsify-katex-ex")
+					}).then(() => {
+						return importPackage("katex/dist/contrib/copy-tex.min.js");
+					})
+				};
+				let pkgs_promise = [
+					importPackage("docsify@4/lib/plugins/external-script.min.js"),
+					importPackage("docsify@4/lib/plugins/search.min.js"),
+					importPackage("docsify-count/dist/countable.min.js"),
+					importPackage("docsify-plugin-toc/dist/docsify-plugin-toc.min.js"),
+					importKaTeX()
+				];
+				let result = await Promise.allSettled(pkgs_promise);
+				// console.log(result);
+				await tryImportScript("./crypto-polyfill.js").then(() => {
+					return tryImportScript("./article-decryption.js")
+				});
+
+				await tryImportScript("./prismjs-workaround.js");
+			})().then(() => {
+				return importPackage("docsify@4")
+			}).then(() => {
+				return importPrism();
+			})
+
+			const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
+				// console.log(stylesheet_url2 = stylesheet_url)
+			if((!stylesheet_url.endsWith(".min.css")) && stylesheet_url.endsWith(".css") && stylesheet_url.includes("jsdelivr")) 
+				script_url = stylesheet_url.replace(/\.css$/, '.min.css');
+				// console.log(stylesheet_url2, stylesheet_url)
+				// stylesheet_url = stylesheet_url.replaceAll(".min.css", ".css")
+				const stylesheet_element = document.createElement("link");
+				stylesheet_element.rel = "stylesheet";
+				stylesheet_element.href = stylesheet_url;
+				stylesheet_element.onerror = reject;
+				stylesheet_element.onload = resolve;
+				document.head.appendChild(stylesheet_element);
 			});
-			
-			await tryImportScript("./prismjs-workaround.js");
-		})().then(() => {
-			return importPackage("docsify@4")
-		}).then(() => {
-			return importPrism();
-		})
-	</script>
-	<script>
-		
-		const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
-			// script_url = script_url.replaceAll(".min.css", ".css")
-			const stylesheet_element = document.createElement("link");
-			stylesheet_element.rel = "stylesheet";
-			stylesheet_element.href = stylesheet_url;
-			stylesheet_element.onerror = reject;
-			stylesheet_element.onload = resolve;
-			document.head.appendChild(stylesheet_element);
-		});
-		const tryImportStyleSheetFallback = async (scripts_url) => {
-			let ret = false;
-			for (let u of scripts_url) {
-				try {
-					await tryImportStyleSheet(u);
-					ret = true;
-				} catch (e) {
-					document.head.removeChild(e.target);
-					console.log(e);
+			const tryImportStyleSheetFallback = async (scripts_url) => {
+				let ret = false;
+				for (let u of scripts_url) {
+					try {
+						await tryImportStyleSheet(u);
+						ret = true;
+					} catch (e) {
+						console.log(e);
+						document.head.removeChild(e.target);
+					}
+					if (ret) return 0;
 				}
-				if (ret) return 0;
-			}
-			return 1;
-		};
-		const importPackageCSS = async (package_name) => {
-			const pattern = [
-			`//testingcf.jsdelivr.net/npm/${package_name}`,
-				`//s4.zstatic.net/npm/${package_name}`,
-				`//jsd.onmicrosoft.cn/npm/${package_name}`,
-				`//gcore.jsdelivr.net/npm/${package_name}`,
-				`//fastly.jsdelivr.net/npm/${package_name}`,
-				`//cdn.jsdelivr.net/npm/${package_name}`,
-				`//quantil.jsdelivr.net/npm/${package_name}`,
-				`//originfastly.jsdelivr.net/npm/${package_name}`,
-			];
-			return tryImportStyleSheetFallback(pattern);
-		};
-		importPackageCSS("docsify@4/lib/themes/vue.min.css");
-		importPackageCSS("prismjs@1/themes/prism.min.css");
-		importPackageCSS("docsify-plugin-toc@1.3.1/dist/light.min.css");
-		importPackageCSS("prismjs@1/plugins/toolbar/prism-toolbar.min.css")
-		importPackageCSS("katex@latest/dist/katex.min.css")
+				return 1;
+			};
+			const importPackageCSS = async (package_name) => {
+				return tryImportStyleSheetFallback(pattern.map(v => v + package_name));
+			};
+			importPackageCSS("docsify@4/lib/themes/vue.css");
+			importPackageCSS("prismjs@1/themes/prism.min.css");
+			importPackageCSS("docsify-plugin-toc/dist/light.css");
+			importPackageCSS("prismjs@1/plugins/toolbar/prism-toolbar.min.css")
+			importPackageCSS("katex@latest/dist/katex.min.css")
+		});
 	</script>
 
 	<!-- Also insert you custom css -->
