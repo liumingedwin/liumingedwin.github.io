@@ -1,4 +1,4 @@
-# MSYS2: 在 `Windows` 上开发 `Win32` 应用
+# MSYS2: 在 Windows 上开发 Win32 应用
 
 ## 前言
 
@@ -6,20 +6,20 @@
 
 ~~(Keywords: `msys2, msys32, win32, windows`)~~
 
-目前为止, 我在 `Windows` 环境上使用过 `4` 种开发 `Win32` 软件的环境, 分别是: `Dev-C++`( `OI` 附送好吧), `Code::Blocks`, `Red Panda Dev-C++`(前者 `Dev-C++` 的变种)以及 make + 手工编译. 经过一番研究, 我发现手工编译反而是最省心的, 理由如下:
+目前为止, 我在 Windows 环境上使用过 4 种开发 Win32 软件的环境, 分别是: Dev-C++(OI 附送好吧), Code::Blocks(cross platform), Red Panda Dev-C++(前者 Dev-C++ 的变种)以及 make + 手工编译. 经过一番研究, 我发现手工编译反而是最省心的, 理由如下:
 
-1. 我使用的是 `msys2` 的 `gcc/g++` , 非常稳定, 不会出现以前 `Dev-C++` 一个软件, 一天开一个新项目, 一天一个版本的痛苦经历.~~(我还记得当时四年级, 14天把一个文本编辑器从 `v1.0` 送到了 `v14.0`)~~
-2. `make` 编译, 避免了手工编译的麻烦, 与 `Linux` 的 `GNU` 工具链相吻合. 
-3. 使用 `Vim` , 轻量化. ~~(还记得大家用 `Dev-C++ / Code::Blocks` 三天一次 `OOM` 吗)~~
-4. 环境齐全, 跟进微软 `Microsoft` 最新的 `Win32 API` 库. 
-5. 手写 `.rc`, 避免格式各种不兼容. 
+1. 我使用的是 msys2 的 GCC, 非常稳定, 不会出现以前 Dev-C++ 一个软件, 一天开一个新项目, 一天一个版本的痛苦经历.~~(我还记得当时四年级, 14天把一个文本编辑器从 v1.0 送到了 v14.0)~~
+2. `make` 编译, 避免了手工编译的麻烦, 方便从 Linux 的开发环境切换. 
+3. 使用 Vim, 轻量化. ~~(还记得大家用 Dev-C++ / Code::Blocks 三天一次 OOM 吗)~~
+4. 环境齐全, 跟进微软 Microsoft 最新的 Win32 API 库. 
+5. 手写 .rc, 避免格式各种不兼容. 
 6. 软件干净, 静态编译后基本无依赖. 
 
 ### 小贴士 
 
 1. 为了能够更快速地浏览到本文的图, 您可以使用镜像站打开本博客. 
 
-2. 有人可能知道 `Git Bash` 使用的便是 `msys2` 的魔改版, 但那个版本不带有 `pacman`, 没有 `gcc/g++`, 但有 `Vim` (因为要 `git commit`), 不作推荐
+2. 有人可能知道 Git Bash 使用的便是 mintty, 这也是 MSYS2 的默认终端. 
 
 ## 安装
 
@@ -33,25 +33,25 @@
 
 安装路径推荐 `数据盘:\msys2` 或  `数据盘:\msys64`. 
 
-(只适用于安装版)然后, 设置环境变量. 以各种方式运行 `C:\Windows\system32\SystemPropertiesAdvanced.exe`, 点环境变量, 双击 `Path` (系统/用户看您心情). 若是 `Windows 7 ~ 8`, 手动输入`;C:\msys2`, 否则直接使用图形化界面添加安装目录. 
+(只适用于安装版)然后, 设置环境变量. 以各种方式运行 `C:\Windows\system32\SystemPropertiesAdvanced.exe`, 点环境变量, 双击 `Path` (系统或用户依照实际情况). 若是 Windows 7 ~ 8, 手动输入`;C:\msys2`, 否则直接使用图形化界面添加安装目录. 
 
 ![env-args](./msys2-win32-dev-resources/image-20230721-21.04.40.png)
 
-前面只是为了安装 `msys2` 这个兼容层, 下面进入重头戏. 
+前面只是为了安装 msys2 这个兼容层, 下面进入重头戏. 
 
-先打开一个 `msys2` 终端, 最好是 `mingw64` 环境, 初始化并找找感觉.   
+先打开一个 msys2 终端, 最好是 `mingw64` 环境, 初始化并找找感觉.   
 
-**(各个终端其实很多数据都是互通的)**
+**(各个终端其实很多配置都是互通的)**
 
 如果是国内环境, 别忘了调整镜像源. 
 
-依次调整 `/etc/pacman.d/msys.mirrorlist, /etc/pacman.d/clang32.mirrorlist, /etc/pacman.d/clang64.mirrorlist, /etc/pacman.d/mingw.mirrorlist, /etc/pacman.d/mingw32.mirrorlist, /etc/pacman.d/mingw64.mirrorlist,/etc/pacman.d/ucrt64.mirrorlist` 五个文件, 将您认为较快且安全的镜像站调至前方并加入适量注释。
+调整 `/etc/pacman.d/msys.mirrorlist, /etc/pacman.d/clang32.mirrorlist, /etc/pacman.d/clang64.mirrorlist, /etc/pacman.d/mingw.mirrorlist, /etc/pacman.d/mingw32.mirrorlist, /etc/pacman.d/mingw64.mirrorlist,/etc/pacman.d/ucrt64.mirrorlist` 五个文件, 将您认为较快且安全的镜像站调至前方并加入适量注释。
 
 <!--[图]-->
 
 ![adjust-mirrors](./msys2-win32-dev-resources/image-20230721-21.31.10.png)
 
-**注意: `msys2` 并不自带 `vi/vim`! **
+**注意: msys2 并不自带 vi/vim! 携带 Vim 的是 Git 里面的 `mintty`!**
 
 <!-- [图 from Windows 11] -->
 
@@ -69,13 +69,13 @@ pacman -S --needed mingw-w64-x86_64-toolchain
 # 小贴士: Ctrl + Ins ----> Copy, Shift + Ins ---> Paste, 右键 Options 还可以选 mintty 的字体.  
 ```
 
-**提醒: 如果需要在 `VSCode` 编译 `gcc`, 也可以将 `C:\msys2\mingw64\bin` 等环境一并加入环境变量, 这些程序可以在脱离 `msys2` 的情况下独立使用. **
+**提醒: 如果需要在 VSCode 使用 GCC 编译, 也可以将 `C:\msys2\mingw64\bin` 等环境一并加入环境变量, 这些程序可以在脱离 `msys2` 的情况下独立使用. **
 
-## 实验: 使用 `gcc` 编译含依赖库的软件
+## 实验: 使用 GCC 编译含依赖库的软件
 
-## 实验: 自行编译基于 `Win32` 子系统的软件
+## 实验: 自行编译基于 Win32 子系统的软件
 
-小提示: 如果您对 `Win32` 编程仍很陌生, 可以移步微软的官方教程: [Microsoft Learn: C/C++ Win32 编程入门](https://learn.microsoft.com/zh-cn/windows/win32/learnwin32/). 
+小提示: 如果您对 Win32 编程仍很陌生, 可以移步微软的官方教程: [Microsoft Learn: C/C++ Win32 编程入门](https://learn.microsoft.com/zh-cn/windows/win32/learnwin32/). 
 
 ### 在对话框下玩玩 `Hello world`
 
@@ -98,7 +98,7 @@ g++ 1.cpp -luser32 -mwindows -mwin32 -static-libgcc -static-libg++ -o 1.exe
 
 您应当能在屏幕中央看到 `Hello world` 的提示字样. 
 
-如果不能，请参照[此节](#UNICODE 说明)。
+如果不能，请参照 [此节](#unicode-%E8%AF%B4%E6%98%8E)
 
 ### 使用资源文件创建菜单栏, 对话框, 图标, 图片
 
@@ -107,15 +107,15 @@ g++ 1.cpp -luser32 -mwindows -mwin32 -static-libgcc -static-libg++ -o 1.exe
 ```bash
 windres -J rc -O COFF source.rc target.res # 只有 COFF 是与 g++ 兼容的... 
 g++ -c main.cpp -o main.o 
-g++ target.res main.o -o -lgdi32 -luser32 -O2 final.exe
+g++ target.res main.o -o -lgdi32 -luser32 -O2 -static final.exe
 ```
 
 ```cpp
-//2.h
-//两个资源文件的宏
+//	.h
+//	两个资源文件的宏
 #define IDB_BITMAP1 1001
 #define IDI_ICON    1002
-//l2.cpp 
+//	l2.cpp 
 #include <cstdio>
 #include <cstring>
 #include <windows.h>
@@ -132,10 +132,10 @@ void upd_title(HWND hwnd) {
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 		case WM_CREATE: {
-             //GetObject(hBitmap, sizeof(BITMAP), &bmp);  //得到一个位图对象  
-			//hBitmap = LoadBitmapA(g_Inst, MAKEINTRESOURCEA(IDB_BITMAP1));
-             hBitmap = (HBITMAP)LoadImageA(g_Inst, MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 0, 0, NULL);
-             upd_title(hwnd);
+            //	GetObject(hBitmap, sizeof(BITMAP), &bmp);  //得到一个位图对象  
+			//	hBitmap = LoadBitmapA(g_Inst, MAKEINTRESOURCEA(IDB_BITMAP1));
+            hBitmap = (HBITMAP)LoadImageA(g_Inst, MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 0, 0, NULL);
+            upd_title(hwnd);
 			break;
 		}
 		case WM_PAINT: {
@@ -143,20 +143,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			HDC hdc = BeginPaint(hwnd, &ps);
 			HDC hMemDC = CreateCompatibleDC(hdc);
 			SelectObject(hMemDC, hBitmap); 
-             RECT rect;
-             GetClientRect(hwnd, &rect);
+            RECT rect;
+            GetClientRect(hwnd, &rect);
 			BitBlt(hdc, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hMemDC, 0, 0, SRCCOPY);
 			DeleteDC(hMemDC);
 			EndPaint(hwnd, &ps);
 			return true;
 		}
         case WM_SIZE: {
-             upd_title(hwnd);
-             break;
+            upd_title(hwnd);
+            break;
         }
 		case WM_DESTROY: {
 			DeleteObject(hBitmap);
-             PostQuitMessage(0);
+            PostQuitMessage(0);
 			break;
 		}
 		default: {
@@ -208,17 +208,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 ```
 
 ```shell
-///2.rc
-///请准备好 2.bmp 和 2.ico
-///2.bmp 必须以 24 位保存 QwQ
+///	2.rc
+///	请准备好 2.bmp 和 2.ico
+///	2.bmp 必须以 24 位保存 QwQ
 
 #include "2.h"
 IDB_BITMAP1 BITMAP "2.bmp"
 IDI_ICON ICON "2.ico"
-//其中好玩的是, 当 .rc 文件需要嵌套时, 可以使用 BEGIN/END 或者 {}
+//	其中有趣的是, 当 .rc 文件需要嵌套时, 可以使用 BEGIN/END 或者 {}
 ```
-
-
+请注意: 在工程中, 运行效率和代码清晰都是极其重要的!!   
+~~我见过一个开发同学用两个 for(i, j from -2000 to 2000) 扫屏.~~ 听完我觉得这太离谱了. 
 
 
 
@@ -228,9 +228,10 @@ IDI_ICON ICON "2.ico"
 
 `make` 是发源于 `Linux` 的源码编译工具, 用于无脑编译. 
 
-我们将稍微讲一下 `makefile` 文件的规则, 然后 `Talk is cheap, show me your code.` 
+我们将稍微讲一下 `makefile` 文件的规则, 然后直接上代码.     
+因为 Linus 说得好, "Talk is cheap. Show me your code!"  
 
-![image-20230722154232145](./msys2-win32-dev-resources/image-20230721-22.02.21.png)
+![When we are looking for makefile what we are really doing](./msys2-win32-dev-resources/image-20230721-22.02.21.png)
 
 ### Dev-C++ Style
 
@@ -426,13 +427,13 @@ clean:
 
 
 
-可见它们都是由变量(可略去), 命令两部分组成. 其中命令可以使用@避免输出, 跟 `Windows Command Processor` 有相似之处. 
+可见它们都是由变量(可略去), 命令两部分组成. 其中命令可以使用 `@` 避免输出, 跟 Windows Command Processor 有相似之处. 
 
 注意: `cmake`, `make`, `ninja`, `cargo` 语法不尽相同! `ninja` 是用来生成配置文件以调用其他几个的。
 
 
 
-所以用不用, 怎么写, 看你的了!
+所以用不用, 怎么写, 由你决定!
 
 ```makefile
 # MinGW32-Make
@@ -446,11 +447,11 @@ g++ target.res main.o -o bin/final.exe
 
 ## Unicode 说明
 
-因为历史原因，默认情况下，`gcc` 将会链接到 `ANSI` 版 `Windows API`。然而，`UNICODE` 发布后，因为宽字符版 `API` 效率更高，开发者们更倾向于使用 `UNICODE` 宽字符版 API。
+因为历史原因，默认情况下，GCC 将会使用宏链接到 ANSI 版 Windows API. 然而，Unicode 发布后，因为宽字符版 API 效率更高，开发者们更倾向于使用宽字符版 API. 更准确的, UTF-16. 
 
-如果遇到 `Unicode` 问题，只需要在编译指令加一行 `-municode` 即可。
+如果遇到 Unicode 问题，只需要在编译指令加一行 `-municode` 即可。
 
-注意: wWinMain !!
+注意: `wWinMain`!!  
 
 ## 集成到终端
 
@@ -468,13 +469,13 @@ g++ target.res main.o -o bin/final.exe
 msys2_shell.cmd -mingw64 -defterm -here -no-start
 ```
 
-~~(小彩蛋: `mintty` 的图标在 `/usr/share/icons/hicolor/256x256/apps`)~~
+~~(小彩蛋: mintty 的图标在 `/usr/share/icons/hicolor/256x256/apps`)~~
 
 <!-- [配置完成动图/视频] -->
 
 ## 后记
 
-本篇文章是本人第一篇在 `Typora` 上面写的文章. 
+本篇文章是本人第一篇在 Typora 上面写的文章. 
 
 ~~(我用的是破解版, 小朋友们不要学我)~~
 
@@ -482,9 +483,11 @@ msys2_shell.cmd -mingw64 -defterm -here -no-start
 
 图片已经补全, 可以顺利浏览. 
 
-**LXGW WenKai Mono GB 非常舒服, 不足也很明显, 有点扁. ** 
+**LXGW WenKai Mono GB 非常舒服, 不足也很明显, 有点扁.** 
 
-<!-- [图] -->
 
-![image-20230722154454990](./msys2-win32-dev-resources/image-20230721-21.45.22.png)
+![Typora Screenshot](./msys2-win32-dev-resources/image-20230721-21.45.22.png)
 
+2025 年 7 月 22 日更新: 一直以来很想修正里面的错误, 订正排版, 但是咕咕咕咕咕. 
+现在要我推荐, 我或许会更推荐 [小熊猫新版](https://github.com/royqh1979/RedPanda-CPP), 开源好用, 自动链接, 新版库. 比如 AppContainer 这样的黑科技, 在内置 GCC 支持就挺好. 
+最后一句话, 萝卜白菜, 各有所爱. 祝各位能够找到自己称心应手的环境! 
