@@ -1,7 +1,7 @@
 * [Chromium 二三问](Techie/chromepp-rep.md)
 * [视频播放测试](Techie/video-test.md)
 * [二分图匹配](Techie/bipartite-graphs.md)
-* [NTP Systemd](Techie/ntp-systemd.md)
+* [NTP 修改](Techie/ntp.md)
 * [DNS Over HTTPS](Techie/dns-over-https.md)
 * [EDK2 OVMF 编译](Techie/edk2-ovmf.md)
 * [[23-07-22]msys2:Win32 从入门到入土](Techie/msys2-win32-dev.md)

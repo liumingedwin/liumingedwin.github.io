@@ -1,7 +1,6 @@
 # 设置 `NTP` 服务器  
 
-默认情况下, 系统默认`NTP` 服务器在国外, 国内几乎无法使用.   
-因此，我们需要设置成教育网或境内的 `NTP`服务器.
+因此，我们需要更换 `NTP` 服务器.
 ## Systemd 修改方法  
 ```bash
 sudo vim /etc/systemd/timesyncd.conf
