@@ -1,3 +1,4 @@
+* [视频播放测试](Techie/video-test.md)
 * [二分图匹配](Techie/bipartite-graphs.md)
 * [ChatGPT](Techie/chatgpt.md)
 * [NTP Systemd](Techie/ntp-systemd.md)
