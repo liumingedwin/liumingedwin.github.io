@@ -100,7 +100,7 @@
 				language: 'chinese'
 			},
 			logo: "../favicon.ico"
-		});	
+		});
 	</script>
 
 	<script>
@@ -117,8 +117,8 @@
 			const script_element = document.createElement("script");
 			script_element.crossorigin = "anouymous";
 			script_element.src = script_url;
-			script_element.onerror = reject;
-			script_element.onload = resolve;
+			script_element.onerror = (...args) => reject(args);
+			script_element.onload = (...args) => resolve(args);
 			document.head.appendChild(script_element);
 		});
 
@@ -129,7 +129,7 @@
 					await tryImportScript(u);
 					ret = true;
 				} catch (e) {
-					document.head.removeChild(e.target);
+					document.head.removeChild(e[0].target);
 					console.log(e);
 				}
 				if (ret) return 0;
@@ -159,7 +159,7 @@
 			tryImportScript("https://unpkg.com/cdn-delay-test@1.1.0/req.js").then(() => {
 				counter++;
 				return rnk["//unpkg.com/"] = counter;
-			}).catch(() => new Promise(() => 0)), 
+			}).catch(() => new Promise(() => 0)),
 			tryImportScript("https://jsd.onmicrosoft.cn/npm/cdn-delay-test@1.1.0/req.js").then(() => {
 				counter++;
 				return rnk["//jsd.onmicrosoft.cn/npm/"] = counter;
@@ -194,15 +194,15 @@
 			}).catch(() => new Promise(() => 0))
 		];
 		Promise.race(promises).then((res) => {
-			console.log("Run for: %d", performance.now())
+//			console.log("Run for: %d", performance.now())
 			const pattern = pattern_old.sort((a, b) => rnk[a] - rnk[b]);
 			console.log(pattern, rnk);
 			const importPackage = async (package_name) => {
 				return tryImportScriptFallback(pattern.map(v => v + package_name));
 			};
 			let importPrism = async () => {
-				// await importPackage("prismjs@1/components/prism-core.min.js");
-				// await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
+//				await importPackage("prismjs@1/components/prism-core.min.js");
+//				await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
 				const constructLocalUrl = (v) => `prismjs@1/components/prism-${v}.min.js`;
 				const support_language = ["bash", "css",
 					"docker", "fortran", "git", "ini", "java",
@@ -213,13 +213,13 @@
 					[
 						importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"),
 						importPackage("prismjs@1/plugins/toolbar/prism-toolbar.min.js").then(() =>
-							importPackage("prismjs@1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js") 
+							importPackage("prismjs@1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
 						),
 							importPackage(constructLocalUrl("clike")).catch(console.warn)
 						.then(() => importPackage(constructLocalUrl("c"))).catch(console.warn)
-						.then(() => importPackage(constructLocalUrl("cpp"))).catch(console.warn), 
+						.then(() => importPackage(constructLocalUrl("cpp"))).catch(console.warn),
 							importPackage(constructLocalUrl("json"))
-						.then(() => Promise.allSettled(() => importPackage(constructLocalUrl("json5")), () => importPackage(constructLocalUrl("jsonp")))), 
+						.then(() => Promise.allSettled(() => importPackage(constructLocalUrl("json5")), () => importPackage(constructLocalUrl("jsonp")))),
 						...support_language.map(
 							v => importPackage(constructLocalUrl(v))
 						)
@@ -256,15 +256,15 @@
 
 			const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
 				// console.log(stylesheet_url2 = stylesheet_url)
-			if((!stylesheet_url.endsWith(".min.css")) && stylesheet_url.endsWith(".css") && stylesheet_url.includes("jsdelivr")) 
+			if((!stylesheet_url.endsWith(".min.css")) && stylesheet_url.endsWith(".css") && stylesheet_url.includes("jsdelivr"))
 				script_url = stylesheet_url.replace(/\.css$/, '.min.css');
 				// console.log(stylesheet_url2, stylesheet_url)
 				// stylesheet_url = stylesheet_url.replaceAll(".min.css", ".css")
 				const stylesheet_element = document.createElement("link");
 				stylesheet_element.rel = "stylesheet";
 				stylesheet_element.href = stylesheet_url;
-				stylesheet_element.onerror = reject;
-				stylesheet_element.onload = resolve;
+				stylesheet_element.onerror = (...args) => reject(args);
+				stylesheet_element.onload = (...args) => resolve(args);
 				document.head.appendChild(stylesheet_element);
 			});
 			const tryImportStyleSheetFallback = async (scripts_url) => {
@@ -275,7 +275,7 @@
 						ret = true;
 					} catch (e) {
 						console.log(e);
-						document.head.removeChild(e.target);
+						//	document.head.removeChild(e[0].target);
 					}
 					if (ret) return 0;
 				}
