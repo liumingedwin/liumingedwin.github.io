@@ -30,16 +30,18 @@
 	<link rel="preload" href="./prismjs-workaround.js" as="script" />
 	<link rel="preload" href="./crypto-polyfill.js" as="script" />
 	<link rel="preload" href="./article-decryption.js" as="script" />
-
 	<!-- <link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css"> -->
 	<style>
-		.markdown-section pre:after {
+		pre:after {
 			left: 0 !important;
 			text-align: left !important;
 		}
-
-		.markdown-section pre>code {
-			padding: 2.2em 5px !important;
+		code[class*=language-],
+pre[class*=language-]  {
+			font-family: Consolas, 'JetBrains Mono', 'Sarasa Gothic SC', monospace!important; 
+		}
+		pre>code {
+			padding: 2.2px 5px !important;
 		}
 	</style>
 </head>
@@ -110,16 +112,18 @@
 	<!-- Docsify v4 -->
 	<!-- <script src="//unpkg.com/docsify@4/lib/docsify.min.js"></script> -->
 	<script>
+		let script_id = 210905;
 		const tryImportScript = (script_url) => new Promise((resolve, reject) => {
 			//.replace(/(?<!\.min)\.js$/i, '.min.js');
 			if((!script_url.endsWith(".min.js")) && script_url.endsWith(".js") && script_url.includes("jsdelivr")) script_url = script_url.replace(/\.js$/, '.min.js');
 			// script_url = script_url.replaceAll(".min.js", ".js")
 			const script_element = document.createElement("script");
+			script_element.id = script_id++;
 			script_element.crossorigin = "anouymous";
 			script_element.src = script_url;
 			script_element.onerror = (...args) => reject(args);
 			script_element.onload = (...args) => resolve(args);
-			document.head.appendChild(script_element);
+			document.body ? document.body.appendChild(script_element) : document.head.appendChild(script_element);
 		});
 
 		const tryImportScriptFallback = async (scripts_url) => {
@@ -194,70 +198,79 @@
 			}).catch(() => new Promise(() => 0))
 		];
 		Promise.race(promises).then((res) => {
-//			console.log("Run for: %d", performance.now())
+			for (let i = 210905; ; ++i) {
+				let obj = document.getElementById(i);
+				if (obj) obj.parentNode.removeChild(obj); else break;
+			}
+			console.log("Run for: %d", performance.now())
 			const pattern = pattern_old.sort((a, b) => rnk[a] - rnk[b]);
 			console.log(pattern, rnk);
 			const importPackage = async (package_name) => {
 				return tryImportScriptFallback(pattern.map(v => v + package_name));
 			};
 			let importPrism = async () => {
-//				await importPackage("prismjs@1/components/prism-core.min.js");
-//				await importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js");
-				const constructLocalUrl = (v) => `prismjs@1/components/prism-${v}.min.js`;
-				const support_language = ["bash", "css",
+				await importPackage("prismjs@1/components/prism-core.min.js");
+				await importPackage("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js");
+				const constructLocalUrl = (v) => `prismjs@1.30.0/components/prism-${v}.min.js`;
+				const support_languages = ["bash", "css",
 					"docker", "fortran", "git", "ini", "java",
 					"javascript", "jsstacktrace",
-					"latex", "markdown", "nsis", "pascal", "php", "python",
+					"latex", /*"markdown", */"nsis", "pascal", /*"php", */"python",
 					"sql", "toml", "typescript", "vim", "visual-basic", "yaml"];
 				return Promise.allSettled(
 					[
-						importPackage("prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"),
-						importPackage("prismjs@1/plugins/toolbar/prism-toolbar.min.js").then(() =>
-							importPackage("prismjs@1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
+						importPackage("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js"),
+						importPackage("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js").then(() =>
+							importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
 						),
 							importPackage(constructLocalUrl("clike")).catch(console.warn)
 						.then(() => importPackage(constructLocalUrl("c"))).catch(console.warn)
 						.then(() => importPackage(constructLocalUrl("cpp"))).catch(console.warn),
 							importPackage(constructLocalUrl("json"))
 						.then(() => Promise.allSettled(() => importPackage(constructLocalUrl("json5")), () => importPackage(constructLocalUrl("jsonp")))),
-						...support_language.map(
+						...support_languages.map(
 							v => importPackage(constructLocalUrl(v))
 						)
 					]
 				);
 			};
-			(async () => {
-				let importKaTeX = () => {
-					return importPackage("katex@latest/dist/katex.min.js").then(() => {
-						return importPackage("docsify-katex-ex")
-					}).then(() => {
-						return importPackage("katex/dist/contrib/copy-tex.min.js");
-					})
-				};
-				let pkgs_promise = [
-					importPackage("docsify@4/lib/plugins/external-script.min.js"),
-					importPackage("docsify@4/lib/plugins/search.min.js"),
-					importPackage("docsify-count/dist/countable.min.js"),
-					importPackage("docsify-plugin-toc/dist/docsify-plugin-toc.min.js"),
-					importKaTeX()
-				];
-				let result = await Promise.allSettled(pkgs_promise);
-				// console.log(result);
-				await tryImportScript("./crypto-polyfill.js").then(() => {
-					return tryImportScript("./article-decryption.js")
-				});
-
-				await tryImportScript("./prismjs-workaround.js");
-			})().then(() => {
-				return importPackage("docsify@4")
-			}).then(() => {
-				return importPrism();
-			})
-
+			window.addEventListener("load", () => {
+				(async () => {
+					let importKaTeX = () => {
+						return importPackage("katex@0.16.22/dist/katex.min.js").then(() => {
+							return importPackage("docsify-katex-ex@3.0.1")
+						}).then(() => {
+							return importPackage("katex@0.16.22/dist/contrib/copy-tex.min.js");
+						})
+					};
+					let pkgs_promise = [
+						importPackage("docsify@4.13.1/lib/plugins/external-script.min.js"),
+						importPackage("docsify@4.13.1/lib/plugins/zoom-image.min.js"), 
+						importPackage("docsify@4.13.1/lib/plugins/search.min.js"),
+						importPackage("docsify-count@1.1.0/dist/countable.min.js"),
+						importPackage("docsify-plugin-toc@1.3.2/dist/docsify-plugin-toc.min.js"),
+						importKaTeX()
+					];
+					let result = await Promise.allSettled(pkgs_promise);
+					// console.log(result);
+					await tryImportScript("./crypto-polyfill.js").then(() => {
+						return tryImportScript("./article-decryption.js")
+					});
+					await tryImportScript("./prismjs-workaround.js");
+				})().then(() => {
+					return importPackage("docsify@4.13.1")
+				}).then(() => {
+					return importPrism();
+				}).then(() => {
+					console.log("here")
+					window.PrismHandler && window.PrismHandler(); 
+					window.PrismLoaded = true; 
+				})
+			});
 			const tryImportStyleSheet = (stylesheet_url) => new Promise((resolve, reject) => {
 				// console.log(stylesheet_url2 = stylesheet_url)
-			if((!stylesheet_url.endsWith(".min.css")) && stylesheet_url.endsWith(".css") && stylesheet_url.includes("jsdelivr"))
-				script_url = stylesheet_url.replace(/\.css$/, '.min.css');
+				if((!stylesheet_url.endsWith(".min.css")) && stylesheet_url.endsWith(".css") && stylesheet_url.includes("jsdelivr"))
+					script_url = stylesheet_url.replace(/\.css$/, '.min.css');
 				// console.log(stylesheet_url2, stylesheet_url)
 				// stylesheet_url = stylesheet_url.replaceAll(".min.css", ".css")
 				const stylesheet_element = document.createElement("link");
@@ -284,11 +297,12 @@
 			const importPackageCSS = async (package_name) => {
 				return tryImportStyleSheetFallback(pattern.map(v => v + package_name));
 			};
-			importPackageCSS("docsify@4/lib/themes/vue.css");
-			importPackageCSS("prismjs@1/themes/prism.min.css");
-			importPackageCSS("docsify-plugin-toc/dist/light.css");
-			importPackageCSS("prismjs@1/plugins/toolbar/prism-toolbar.min.css")
-			importPackageCSS("katex@latest/dist/katex.min.css")
+			importPackageCSS("docsify@4.13.1/lib/themes/vue.css");
+			importPackageCSS("prismjs@1.30.0/themes/prism.min.css");
+			importPackageCSS("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.css");
+			importPackageCSS("docsify-plugin-toc@1.3.2/dist/light.css");
+			importPackageCSS("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.css")
+			importPackageCSS("katex@0.16.22/dist/katex.min.css")
 		});
 	</script>
 

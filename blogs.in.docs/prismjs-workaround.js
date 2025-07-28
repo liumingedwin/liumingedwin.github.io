@@ -1,19 +1,36 @@
-/*
 window.$docsify.plugins = window.$docsify.plugins || [];
-console.log("qwq");
+//	console.log("qwq");
 (function decrypt_docsify_content_plug() {
     return window.prismjs_workaround = (hook, vm) => {
-        hook.doneEach(function () {
-            console.log("notice. ");
-            let app = document.querySelector("div#app");
-            let interval = setInterval(Prism.highlightAllUnder, 500.0, app);
-            console.log(app, interval);
+/*
+        hook.afterEach((html) => {
+		const div = document.createElement("div");
+		div.innerHTML = html;
+		div.hidden = true
+		console.log(Object.keys(Prism.languages))
+		document.body.appendChild(div);
+//		Prism.highlightAllUnder(div, false, (...args) => console.warn(args));
+		Array.from(div.querySelectorAll("pre")).forEach(v => {
+			//	Prism.highlightElement(v);
+		});
+//	警钟敲烂:	highlightAllUnder 抄成 highlightAll
+//			async 写成了 true
+		console.log(div.innerHTML);
+		return div.innerHTML; 
         });
+*/
+        hook.doneEach(() => {
+		window.PrismHandler = () => {
+			console.log(JSON.stringify(Object.keys(Prism.languages)));
+			requestAnimationFrame(Prism.highlightAll); 
+		}; 
+		if(window.PrismLoaded) window.PrismHandler(); 
+	});
     };
 })();
-console.log($docsify)
+//	console.log($docsify)
 window.$docsify.plugins = [window.prismjs_workaround, ...window.$docsify.plugins];
-*/
+/*
 (function () {
     // 选择需要观察变动的节点
     // const targetNode = document.querySelector("article#main");
@@ -30,9 +47,9 @@ window.$docsify.plugins = [window.prismjs_workaround, ...window.$docsify.plugins
         const loc = document.querySelector("article#main");
         if (Prism)
             // Prism.highlightAll();
-            Prism.highlightAllUnder(loc ? loc : targetNode);
+            Prism.highlightAllUnder(targetNode);
         if(observer)
-        observer.observe(targetNode, config);
+        observer.observe(loc, config);
     };
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
@@ -40,3 +57,6 @@ window.$docsify.plugins = [window.prismjs_workaround, ...window.$docsify.plugins
     requestAnimationFrame(callback)
     // 之后，可停止观察
 })();
+*/
+
+
