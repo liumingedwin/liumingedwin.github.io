@@ -1,6 +1,6 @@
+* [Chromium 二三问](Techie/chromepp-rep.md)
 * [视频播放测试](Techie/video-test.md)
 * [二分图匹配](Techie/bipartite-graphs.md)
-* [ChatGPT](Techie/chatgpt.md)
 * [NTP Systemd](Techie/ntp-systemd.md)
 * [DNS Over HTTPS](Techie/dns-over-https.md)
 * [EDK2 OVMF 编译](Techie/edk2-ovmf.md)
