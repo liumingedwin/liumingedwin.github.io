@@ -8,4 +8,3 @@
 * [EDK2 OVMF 编译](Techie/edk2-ovmf.md)
 * [[23-07-22]msys2:Win32 从入门到入土](Techie/msys2-win32-dev.md)
 * [Linux Wayland入门](Techie/i-love-wayland.md)
-* [Archive: HW 机房 IP 网段](Techie/ip.md)
