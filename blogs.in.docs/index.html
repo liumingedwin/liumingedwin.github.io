@@ -43,8 +43,12 @@ pre[class*=language-]  {
 			font-family: Consolas, 'JetBrains Mono', 'Sarasa Gothic SC', monospace!important; 
 		}
 		pre>code[class*=language-][class*=language-][class*=language-] {
-			padding: 0px 5px !important;
+			padding-top: 12px;
+			padding-bottom: 0px;
 			overflow-x: auto;
+		}
+		pre>div.line-numbers-div {
+			margin-top: 12px;
 		}
 		pre[class*=language-][class*=language-] {
 /*		        font-size: .8rem;*/
@@ -251,36 +255,19 @@ pre[class*=language-]  {
 			const importPackage = async (package_name) => {
 				return tryImportScriptFallback(pattern.map(v => v + package_name));
 			};
-			let importPrismOld = async () => {
-//				await importPackage("prismjs@1/components/prism-core.min.js");
-				const constructLocalUrl = (v) => `prismjs@1.30.0/components/prism-${v}.min.js`;
-				const support_languages = ["bash", "css",
-					"docker", "fortran", "git", "ini", "java",
-					"javascript", "jsstacktrace",
-					"latex", "lua", "makefile", /*"markdown", */"nsis", "pascal", /*"php", */"python",
-					"sql", "toml", "typescript", "vim", "visual-basic", "yaml"];
-				return Promise.allSettled(
-					[
-						importPackage("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js").then(() =>
-							importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
-						),
-							importPackage(constructLocalUrl("clike")).catch(console.warn)
-						.then(() => importPackage(constructLocalUrl("c"))).catch(console.warn)
-						.then(() => importPackage(constructLocalUrl("cpp"))).catch(console.warn),
-							importPackage(constructLocalUrl("json"))
-						.then(() => Promise.allSettled(() => importPackage(constructLocalUrl("json5")), () => importPackage(constructLocalUrl("jsonp")))),
-						...support_languages.map(
-							v => importPackage(constructLocalUrl(v))
-						)
-					]
-				)
-					//.then(() => tryImportScript("./fork-prism-v1.30.0-line-numbers.js"));
-			};
-			let importPrism = async () => {
+				let importPrism = async () => {
 				return Promise.allSettled(
 					[
 						importPackage("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js").then(() => 
-							importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
+							Promise.allSettled(
+								[
+									importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"), 
+//									importPackage("prismjs@1.30.0/plugins/show-language/prism-show-language.js"),  
+									tryImportScript("./fork-prism-v1.30.0-show-language.js")
+//									importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
+//	虚空调试半小时
+								]
+							)
 						), 
 						importPackage("prismjs@1.30.0/plugins/autoloader/prism-autoloader.js")
 					]

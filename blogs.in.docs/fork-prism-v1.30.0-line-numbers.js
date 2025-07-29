@@ -236,6 +236,7 @@
 			pre.style.counterReset = 'linenumber ' + (parseInt(pre.getAttribute('data-start'), 10) - 1);
 		}
 		var div = document.createElement("div");
+		div.className = "line-numbers-div";
 		div.appendChild(lineNumbersWrapper);
 		div.style.position = 'absolute';
 		var parNode = env.element.parentNode; 
