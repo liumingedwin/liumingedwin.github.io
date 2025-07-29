@@ -206,7 +206,7 @@
 		if (!pre || !/pre/i.test(pre.nodeName)) {
 			return;
 		}
-		var fntSiz = code.computedStyleMap().get("font-size").toString();
+		var fntSiz = window.getComputedStyle(code)["font-size"]
 		// Abort if line numbers already exists
 		if (code.parentNode.querySelector('.line-numbers-rows')) {
 			return;
