@@ -22,7 +22,12 @@ window.$docsify.plugins = window.$docsify.plugins || [];
         hook.doneEach(() => {
 		window.PrismHandler = () => {
 			console.log(JSON.stringify(Object.keys(Prism.languages)));
-			requestAnimationFrame(Prism.highlightAll); 
+			Array.from(document.querySelectorAll("pre code")).forEach((v) => {
+				v.parentNode.classList.add("line-numbers")
+				Prism.highlightElement(v)
+			})
+//			requestAnimationFrame(Prism.highlightAll); 
+//			requestAnimationFrame(() => {console.log(document.body.innerHTML); Prism.highlightAllUnder(document.body, true)})
 		}; 
 		if(window.PrismLoaded) window.PrismHandler(); 
 	});

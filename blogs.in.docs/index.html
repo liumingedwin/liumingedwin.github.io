@@ -32,23 +32,66 @@
 	<link rel="preload" href="./article-decryption.js" as="script" />
 	<!-- <link rel="stylesheet" href="https://unpkg.com/docsify@4/lib/themes/vue.css"> -->
 	<style>
+
 		pre:after {
 			left: 0 !important;
 			text-align: left !important;
 		}
+
 		code[class*=language-],
 pre[class*=language-]  {
 			font-family: Consolas, 'JetBrains Mono', 'Sarasa Gothic SC', monospace!important; 
 		}
-		pre>code {
-			padding: 2.2px 5px !important;
+		pre>code[class*=language-][class*=language-][class*=language-] {
+			padding: 0px 5px !important;
+			overflow-x: auto;
+		}
+		pre[class*=language-][class*=language-] {
+/*		        font-size: .8rem;*/
+			overflow: hidden;
+		}
+		/* 隐藏滚动条上下箭头 */
+		::-webkit-scrollbar-button {
+			display: none;
+		}
+		/* 定义滚动条的宽度和背景 */
+		::-webkit-scrollbar {
+			width: 16px;
+			height: 16px;
+			background-color: #F5F5F5;
+		}
+
+		/* 定义滚动条轨道的样式 */
+		::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+			border-radius: 10px;
+			background-color: #F5F5F5;
+		}
+
+		/* 定义滚动条滑块的样式 */
+		::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+			background-color: #555;
+		}
+
+		/* 鼠标悬停时滚动条滑块的样式 */
+		::-webkit-scrollbar-thumb:hover {
+			background-color: #40a0ff;
+		}
+		/* 修改滚动条宽度和颜色 */
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: #40a0ff #F5F5F5;
 		}
 	</style>
 </head>
 
-<body>
+<body class="line-numbers">
 	<div id="app" data-app></div>
 	<script>
+		window.Prism = window.Prism || {};
+		Prism.manual = true;
 		window.$docsify = window.$docsify || {};
 		Object.assign(window.$docsify, {
 			el: 'div#app',
@@ -58,7 +101,7 @@ pre[class*=language-]  {
 			coverpage: true,
 			loadSidebar: true,
 			basePath: location.pathname,
-			catchPluginErrors: false,
+			catchPluginErrors: true,
 			toc: {
 				tocMaxLevel: 5,
 				target: 'h2, h3, h4, h5, h6',
@@ -160,47 +203,47 @@ pre[class*=language-]  {
 			// 	counter++;
 			// 	rnk["//s4.zstatic.net/ajax/libs/"] = counter;
 			// }),
-			tryImportScript("https://unpkg.com/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://unpkg.com/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//unpkg.com/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://jsd.onmicrosoft.cn/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://jsd.onmicrosoft.cn/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//jsd.onmicrosoft.cn/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://gcore.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://gcore.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//gcore.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://fastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://fastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//fastly.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://testingcf.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://testingcf.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//testingcf.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://cdn.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://cdn.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//cdn.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://quantil.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://quantil.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//quantil.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://originfastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://originfastly.jsdelivr.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//originfastly.jsdelivr.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0)),
-			tryImportScript("https://s4.zstatic.net/npm/cdn-delay-test@1.1.0/req.js").then(() => {
+			tryImportScript("https://s4.zstatic.net/npm/cdn-delay-test@1.1.0/req.js?" + Math.random()).then(() => {
 				counter++;
 				return rnk["//s4.zstatic.net/npm/"] = counter;
 			}).catch(() => new Promise(() => 0))
 		];
 		Promise.race(promises).then((res) => {
-			for (let i = 210905; ; ++i) {
+			for (let i = 210905; i <= script_id; ++i) {
 				let obj = document.getElementById(i);
-				if (obj) obj.parentNode.removeChild(obj); else break;
+				if (obj) obj.parentNode.removeChild(obj); 
 			}
 			console.log("Run for: %d", performance.now())
 			const pattern = pattern_old.sort((a, b) => rnk[a] - rnk[b]);
@@ -208,18 +251,16 @@ pre[class*=language-]  {
 			const importPackage = async (package_name) => {
 				return tryImportScriptFallback(pattern.map(v => v + package_name));
 			};
-			let importPrism = async () => {
-				await importPackage("prismjs@1/components/prism-core.min.js");
-				await importPackage("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js");
+			let importPrismOld = async () => {
+//				await importPackage("prismjs@1/components/prism-core.min.js");
 				const constructLocalUrl = (v) => `prismjs@1.30.0/components/prism-${v}.min.js`;
 				const support_languages = ["bash", "css",
 					"docker", "fortran", "git", "ini", "java",
 					"javascript", "jsstacktrace",
-					"latex", /*"markdown", */"nsis", "pascal", /*"php", */"python",
+					"latex", "lua", "makefile", /*"markdown", */"nsis", "pascal", /*"php", */"python",
 					"sql", "toml", "typescript", "vim", "visual-basic", "yaml"];
 				return Promise.allSettled(
 					[
-						importPackage("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js"),
 						importPackage("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js").then(() =>
 							importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
 						),
@@ -232,8 +273,19 @@ pre[class*=language-]  {
 							v => importPackage(constructLocalUrl(v))
 						)
 					]
-				);
+				)
+					//.then(() => tryImportScript("./fork-prism-v1.30.0-line-numbers.js"));
 			};
+			let importPrism = async () => {
+				return Promise.allSettled(
+					[
+						importPackage("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js").then(() => 
+							importPackage("prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js")
+						), 
+						importPackage("prismjs@1.30.0/plugins/autoloader/prism-autoloader.js")
+					]
+				).then(() => tryImportScript("./fork-prism-v1.30.0-line-numbers.js"));
+			}; 
 			window.addEventListener("load", () => {
 				(async () => {
 					let importKaTeX = () => {
@@ -248,7 +300,8 @@ pre[class*=language-]  {
 						importPackage("docsify@4.13.1/lib/plugins/zoom-image.min.js"), 
 						importPackage("docsify@4.13.1/lib/plugins/search.min.js"),
 						importPackage("docsify-count@1.1.0/dist/countable.min.js"),
-						importPackage("docsify-plugin-toc@1.3.2/dist/docsify-plugin-toc.min.js"),
+//						importPackage("docsify-plugin-toc@1.3.2/dist/docsify-plugin-toc.min.js"),
+//						importPackage("@developerportalsg/docsify-plugin-toc@2.1.10/dist/docsify-plugin-toc.min.js"),
 						importKaTeX()
 					];
 					let result = await Promise.allSettled(pkgs_promise);
@@ -300,7 +353,8 @@ pre[class*=language-]  {
 			importPackageCSS("docsify@4.13.1/lib/themes/vue.css");
 			importPackageCSS("prismjs@1.30.0/themes/prism.min.css");
 			importPackageCSS("prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.css");
-			importPackageCSS("docsify-plugin-toc@1.3.2/dist/light.css");
+//			importPackageCSS("docsify-plugin-toc@1.3.2/dist/light.css");
+//			importPackageCSS("@developerportalsg/docsify-plugin-toc@2.1.10/dist/light.css");
 			importPackageCSS("prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.css")
 			importPackageCSS("katex@0.16.22/dist/katex.min.css")
 		});
